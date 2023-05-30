@@ -1,0 +1,42 @@
+spring:
+  config:
+    activate:
+      on-profile: prod, dev, local
+  servlet:
+    multipart:
+      max-file-size: 10MB
+  jpa:
+    open-in-view: false
+  mvc:
+    throw-exception-if-no-handler-found: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      show-details: always
+
+aws:
+  s3:
+    bucket: ${S3_BUCKET_NAME}
+    init-data-key: ${S3_INIT_DATA_KEY}
+  cloudfront:
+    host: ${CLOUDFRONT_HOST}
+
+inferring:
+  server:
+    host: ${INFERRING_SERVER_HOST}
+
+client:
+  server:
+    host: ${CLIENT_SERVER_HOST}
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 10000
