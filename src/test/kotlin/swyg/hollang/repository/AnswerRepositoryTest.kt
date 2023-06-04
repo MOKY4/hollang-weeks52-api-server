@@ -26,7 +26,7 @@ class AnswerRepositoryTest(
         em.persist(test)
 
         for(i in 1..12){
-            val question = Question(i.toLong(), test, "질문 $i", "https://question$i")
+            val question = Question(i.toLong(), test, "질문 $i")
             em.persist(question)
 
             for(j in 1..2){

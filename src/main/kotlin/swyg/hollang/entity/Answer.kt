@@ -1,12 +1,13 @@
 package swyg.hollang.entity
 
 import jakarta.persistence.*
+import jakarta.persistence.FetchType.*
 import swyg.hollang.entity.common.BaseTimeEntity
 
 @Entity
 class Answer (
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "question_id", nullable = false)
     val question: Question,
 

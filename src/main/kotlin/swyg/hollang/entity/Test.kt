@@ -2,7 +2,7 @@ package swyg.hollang.entity
 
 import jakarta.persistence.*
 import jakarta.persistence.CascadeType.ALL
-import jakarta.persistence.FetchType.LAZY
+import jakarta.persistence.FetchType.EAGER
 import swyg.hollang.entity.common.BaseTimeEntity
 
 @Entity
@@ -17,6 +17,6 @@ class Test (
     @Column(name = "test_id")
     val id: Long? = null
 
-    @OneToMany(mappedBy = "test", fetch = LAZY, cascade = [ALL], orphanRemoval = true)
+    @OneToMany(mappedBy = "test", fetch = EAGER, cascade = [ALL], orphanRemoval = true)
     val questions: MutableList<Question> = mutableListOf()
 }
