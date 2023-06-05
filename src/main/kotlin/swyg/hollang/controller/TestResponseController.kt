@@ -22,7 +22,7 @@ class TestResponseController(
     @PostMapping
     fun createTestResponse(@Valid @RequestBody createTestResponseRequest: CreateTestResponseRequest)
         : ResponseEntity<SuccessResponse<Any>> {
-        val createTestResponseResponse = testResponseManager.createUserTestResponse(createTestResponseRequest)
+        val createTestResponseResponse = testResponseManager.createTestResponse(createTestResponseRequest)
         return ResponseEntity.ok()
             .body(SuccessResponse(
                 HttpStatus.OK.name,
