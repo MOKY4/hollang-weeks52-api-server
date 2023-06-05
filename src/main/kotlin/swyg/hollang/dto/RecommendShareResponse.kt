@@ -3,31 +3,26 @@ package swyg.hollang.dto
 import com.fasterxml.jackson.annotation.JsonIgnore
 import swyg.hollang.entity.*
 
-data class RecommendHobbyAndTypesResponse(
+data class RecommendShareResponse(
     @JsonIgnore val recommendationEntity: Recommendation,
     @JsonIgnore val hobbyTypeEntity: HobbyType,
-    @JsonIgnore val hobbiesEntity: List<RecommendationHobby>,
-    @JsonIgnore val fitHobbyTypesEntity: List<HobbyType>){
+    @JsonIgnore val hobbiesEntity: List<RecommendationHobby>){
 
     val recommendation: RecommendationDto = RecommendationDto(
         recommendationEntity,
         hobbyTypeEntity,
-        hobbiesEntity,
-        fitHobbyTypesEntity
+        hobbiesEntity
     )
 
     data class RecommendationDto(
         @JsonIgnore val recommendationEntity: Recommendation,
         @JsonIgnore val hobbyTypeEntity: HobbyType,
-        @JsonIgnore val hobbiesEntity: List<RecommendationHobby>,
-        @JsonIgnore val fitHobbyTypesEntity: List<HobbyType>
+        @JsonIgnore val hobbiesEntity: List<RecommendationHobby>
     ) {
         val id: Long = recommendationEntity.id!!
-        val didSurvey: Boolean = hobbiesEntity[0].survey != null
         val user: UserDto = UserDto(recommendationEntity.testResponse.user)
         val hobbyType: HobbyTypeDto = HobbyTypeDto(hobbyTypeEntity)
         val hobbies: List<HobbyDto> = hobbiesEntity.map { HobbyDto(it.hobby) }
-        val fitHobbyTypes: List<HobbyTypeDto> = fitHobbyTypesEntity.map { HobbyTypeDto(it) }
     }
 
     data class UserDto(@JsonIgnore val userEntity: User){

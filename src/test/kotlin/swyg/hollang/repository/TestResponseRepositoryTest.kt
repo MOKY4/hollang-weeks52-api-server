@@ -25,7 +25,7 @@ class TestResponseRepositoryTest(
         em.persist(createdUser)
 
         //when
-        val savedTestResponse = testResponseRepository.save(createdUser)
+        val savedTestResponse = testResponseRepository.save(TestResponse(createdUser))
 
         val findTestResponse = em.createQuery("select tr from TestResponse tr where tr.user.id = :userId", TestResponse::class.java)
             .setParameter("userId", createdUser.id)

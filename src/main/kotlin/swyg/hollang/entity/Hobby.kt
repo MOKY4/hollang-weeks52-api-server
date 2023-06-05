@@ -1,7 +1,6 @@
 package swyg.hollang.entity
 
 import jakarta.persistence.*
-import jakarta.persistence.FetchType.LAZY
 import org.hibernate.annotations.ColumnDefault
 import org.hibernate.annotations.DynamicInsert
 import swyg.hollang.entity.common.BaseTimeEntity
@@ -11,16 +10,11 @@ import swyg.hollang.entity.common.BaseTimeEntity
 @Table(indexes = [Index(name = "idx_name", columnList = "name")])
 class Hobby (
 
-    @ManyToMany(fetch = LAZY, cascade = [CascadeType.ALL])
-    @JoinTable(
-        name = "hobby_category",
-        joinColumns = [JoinColumn(name = "hobby_id")],
-        inverseJoinColumns = [JoinColumn(name = "category_id")]
-    )
-    val categories: MutableList<Category>,
-
     @Column(name = "name", nullable = false)
     val name: String,
+
+    @Column(name = "summary", nullable = false)
+    val summary: String,
 
     @Column(name = "description", nullable = false)
     val description: String,

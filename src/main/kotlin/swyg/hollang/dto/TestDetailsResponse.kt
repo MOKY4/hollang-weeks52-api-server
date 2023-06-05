@@ -11,25 +11,30 @@ import swyg.hollang.entity.Test
  * 그 이유는 트랜잭션 생명주기를 서비스와 dao단에서만 고정했기 떄문이다.
  */
 data class TestDetailsResponse (@JsonIgnore val testEntity: Test) {
-    val test: TestDto = TestDto(testEntity)
+    val test: TestDto = TestDto()
+
+    inner class TestDto {
+        val id: Long = testEntity.id!!
+        val version: Long = testEntity.version
+        val questions: List<QuestionDto> = testEntity.questions.map { QuestionDto(it) }
+    }
+
+    inner class QuestionDto(@JsonIgnore val questionEntity: Question) {
+        val id: Long = questionEntity.id!!
+        val number: Long = questionEntity.number
+        val content: String = questionEntity.content
+        val answers: List<AnswerDto> = questionEntity.answers.map { AnswerDto(it) }
+    }
+
+    inner class AnswerDto(@JsonIgnore val answerEntity: Answer) {
+        val id: Long = answerEntity.id!!
+        val number: Long = answerEntity.number
+        val content: String = answerEntity.content
+    }
 }
 
-data class TestDto (@JsonIgnore val testEntity: Test) {
-    val id: Long = testEntity.id!!
-    val version: Long = testEntity.version
-    val questions: List<QuestionDto> = testEntity.questions.map { QuestionDto(it) }
-}
 
-data class QuestionDto(@JsonIgnore val question: Question) {
-    val id: Long = question.id!!
-    val number: Long = question.number
-    val content: String = question.content
-    val imageUrl: String = question.imageUrl
-    val answers: List<AnswerDto> = question.answers.map { AnswerDto(it) }
-}
 
-data class AnswerDto(@JsonIgnore val answer: Answer) {
-    val id: Long = answer.id!!
-    val number: Long = answer.number
-    val content: String = answer.content
-}
+
+
+

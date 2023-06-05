@@ -26,7 +26,7 @@ class AnswerRepositoryTest(
         em.persist(test)
 
         for(i in 1..12){
-            val question = Question(i.toLong(), test, "질문 $i", "https://question$i")
+            val question = Question(i.toLong(), test, "질문 $i")
             em.persist(question)
 
             for(j in 1..2){
@@ -47,7 +47,7 @@ class AnswerRepositoryTest(
 
         //when
         val findAnswers =
-            answerRepository.findByQuestionNumberPairsWithTestVersion(questionAnswerPairs, testVersion)
+            answerRepository.findAllByQuestionAnswerPairsByTestVersion(questionAnswerPairs, testVersion)
 
         //then
         assertThat(findAnswers[0].content).isEqualTo("질문 1 답변 2")

@@ -13,14 +13,11 @@ class HobbyType(
     @Column(name = "description", nullable = false)
     val description: String,
 
-    @Column(name = "mbti_type", nullable = false, length = 4)
-    val mbtiType: String,
-
-    @Column(name = "three_dimension_img_url", nullable = false)
-    val threeDimensionImageUrl: String,
-
     @Column(name = "img_url", nullable = false)
     val imageUrl: String,
+
+    @Column(name = "mbti_type", nullable = false)
+    val mbtiType: String,
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(

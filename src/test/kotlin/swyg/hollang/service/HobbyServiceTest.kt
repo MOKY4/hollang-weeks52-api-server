@@ -10,7 +10,6 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.transaction.annotation.Transactional
-import swyg.hollang.entity.Category
 import swyg.hollang.entity.Hobby
 
 @Transactional
@@ -26,8 +25,8 @@ class HobbyServiceTest(
 
         for (i in 1..40) {
             val hobby = Hobby(
-                mutableListOf(Category("category$i", 1)),
                 "홀랑 $i",
+                "default",
                 "홀랑 $i 상세정보",
                 "https://example.com/hollang$i.png"
             )
