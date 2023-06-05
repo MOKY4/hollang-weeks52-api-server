@@ -10,8 +10,9 @@ import swyg.hollang.repository.testresponse.TestResponseRepository
 @Transactional(readOnly = true)
 class TestResponseService(private val testResponseRepository: TestResponseRepository) {
 
-    fun createTestResponse(user: User): TestResponse {
-        return testResponseRepository.save(user)
+    fun createTestResponse(createdUser: User): TestResponse {
+        val testResponse = TestResponse(createdUser)
+        return testResponseRepository.save(testResponse)
     }
 
     fun countAllTestResponse(): Long {

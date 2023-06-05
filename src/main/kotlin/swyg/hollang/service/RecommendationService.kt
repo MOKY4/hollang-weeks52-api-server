@@ -2,7 +2,7 @@ package swyg.hollang.service
 
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import swyg.hollang.dto.CreateRecommendationResultResponse
+import swyg.hollang.entity.HobbyType
 import swyg.hollang.entity.Recommendation
 import swyg.hollang.entity.TestResponse
 import swyg.hollang.repository.recommendation.RecommendationRepository
@@ -11,13 +11,11 @@ import swyg.hollang.repository.recommendation.RecommendationRepository
 @Transactional(readOnly = true)
 class RecommendationService(private val recommendationRepository: RecommendationRepository) {
 
-    fun save(testResponse: TestResponse, createRecommendationResultResponse: CreateRecommendationResultResponse)
+    @Transactional
+    fun save(testResponse: TestResponse, hobbyType: HobbyType, mbtiScore: List<Map<String, Int>>)
         : Recommendation {
-        val result = mutableMapOf(
-            "hobbyType" to createRecommendationResultResponse.hobbyType,
-            "hobbies" to createRecommendationResultResponse.hobbies
-        )
-        return recommendationRepository.save(testResponse = testResponse, result = result)
+        val recommendation = Recommendation(testResponse, hobbyType, mbtiScore)
+        return recommendationRepository.save(recommendation)
     }
 
     fun getRecommendationWithUserById(recommendationId: Long): Recommendation {

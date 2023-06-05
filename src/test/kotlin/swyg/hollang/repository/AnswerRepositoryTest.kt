@@ -47,7 +47,7 @@ class AnswerRepositoryTest(
 
         //when
         val findAnswers =
-            answerRepository.findByQuestionNumberPairsWithTestVersion(questionAnswerPairs, testVersion)
+            answerRepository.findAllByQuestionAnswerPairsByTestVersion(questionAnswerPairs, testVersion)
 
         //then
         assertThat(findAnswers[0].content).isEqualTo("질문 1 답변 2")

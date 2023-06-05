@@ -24,4 +24,5 @@ class RecommendationController(private val recommendationManager: Recommendation
                 recommendHobbyAndTypesResponse
             ))
     }
+
 }

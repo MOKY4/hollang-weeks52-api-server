@@ -13,4 +13,4 @@ docker-compose.*.yml
 codedeploy/
 
 ### CUSTOM ###
-initData.xlsx
+src/main/resources/static/initData.xlsx

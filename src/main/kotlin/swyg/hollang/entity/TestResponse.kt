@@ -8,7 +8,7 @@ import swyg.hollang.entity.common.BaseTimeEntity
 @Entity
 class TestResponse (
 
-    @OneToOne
+    @OneToOne(fetch = LAZY)
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
     val user: User,
 
@@ -18,7 +18,7 @@ class TestResponse (
     @Column(name = "test_response_id")
     val id: Long? = null
 
-    @OneToOne(mappedBy = "testResponse", fetch = LAZY, cascade = [ALL], orphanRemoval = true)
+    @OneToOne(mappedBy = "testResponse", cascade = [ALL], orphanRemoval = true)
     val recommendation: Recommendation? = null
 
     @OneToMany(mappedBy = "testResponse", fetch = LAZY, cascade = [ALL], orphanRemoval = true)

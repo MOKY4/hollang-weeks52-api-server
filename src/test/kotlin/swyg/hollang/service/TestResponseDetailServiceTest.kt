@@ -16,7 +16,8 @@ import swyg.hollang.entity.*
 @ActiveProfiles(value = ["test"])
 class TestResponseDetailServiceTest(
     @Autowired private val em: EntityManager,
-    @Autowired private val testResponseDetailService: TestResponseDetailService
+    @Autowired private val testResponseDetailService: TestResponseDetailService,
+    @Autowired private val answerService: AnswerService
 ) {
 
     @BeforeEach
@@ -25,7 +26,7 @@ class TestResponseDetailServiceTest(
         em.persist(test)
 
         for(i in 1..12){
-            val question = Question(i.toLong(), test, "질문 $i", "https://question$i")
+            val question = Question(i.toLong(), test, "질문 $i")
             em.persist(question)
 
             for(j in 1..2){
@@ -62,8 +63,12 @@ class TestResponseDetailServiceTest(
             CreateTestResponseDetailRequest(12, 2),
         )
 
+        val questionAnswerPairs = createTestResponseDetailRequests.map { it.questionNumber to it.answerNumber }
+        val answers = answerService
+            .getAnswersByQuestionAnswerPairsByTestVersion(questionAnswerPairs, 1)
+
         //when
-        testResponseDetailService.createTestResponseDetail(createdTestResponse, createTestResponseDetailRequests)
+        testResponseDetailService.createTestResponseDetails(createdTestResponse, answers)
 
         //then
         val findTestResponseDetails =
