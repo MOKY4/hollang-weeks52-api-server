@@ -9,10 +9,8 @@ import swyg.hollang.repository.test.TestRepository
 @Transactional(readOnly = true)
 class TestService(private val testRepository: TestRepository) {
 
-    fun findShuffledTestByVersion(version: Long): TestDetailsResponse {
-        val test = testRepository.findWithQuestionsAndAnswersByVersion(version)
-        //질문 목록들을 섞는다
-        test.questions.shuffle()
+    fun findAndShuffleTestByVersion(version: Long): TestDetailsResponse {
+        val test = testRepository.findByVersionWithQuestions(version)
         return TestDetailsResponse(testEntity = test)
     }
 }

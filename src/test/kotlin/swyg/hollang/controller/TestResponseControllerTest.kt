@@ -25,38 +25,37 @@ class TestResponseControllerTest(
 
     @BeforeEach
     fun beforeEach() {
-        val test = Test(1)
-        em.persist(test)
-
+        val questions: MutableSet<Question> = mutableSetOf()
         for(i in 1..12){
-            val question = Question(i.toLong(), test, "질문 $i", "https://question$i")
-            em.persist(question)
-
+            val answers: MutableSet<Answer> = mutableSetOf()
             for(j in 1..2){
-                val answer = Answer(question, j.toLong(), "질문 $i 답변 $j")
-                em.persist(answer)
-                question.answers.add(answer)
+                val answer = Answer(j.toLong(), "질문 $i 답변 $j")
+                answers.add(answer)
             }
 
-            test.questions.add(question)
+            val question = Question(i.toLong(),"질문 $i", answers)
+            questions.add(question)
         }
 
+        val test = Test(1, questions)
+        em.persist(test)
+
         val hobby1 = Hobby(
-            mutableListOf(),
-            "유튜버 시작하기",
-            "유튜버 시작하기 상세정보",
+            "어도비 일러스트레이트",
+            "default",
+            "어도비 일러스트레이트 상세정보",
             "https://example.com/hollang.png"
         )
         val hobby2 = Hobby(
-            mutableListOf(),
-            "요가",
-            "요가 상세정보",
+            "일러스트 정복하기",
+            "default",
+            "일러스트 정복하기 상세정보",
             "https://example.com/hollang.png"
         )
         val hobby3 = Hobby(
-            mutableListOf(),
-            "헬스",
-            "헬스 상세정보",
+            "어도비 인디자인",
+            "default",
+            "어도비 인디자인 상세정보",
             "https://example.com/hollang.png"
         )
         em.persist(hobby1)
