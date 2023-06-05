@@ -2,15 +2,19 @@ package swyg.hollang.manager
 
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
+import swyg.hollang.dto.CreateRecommendationSurveyRequest
 import swyg.hollang.dto.RecommendHobbyAndTypesResponse
 import swyg.hollang.dto.RecommendShareResponse
+import swyg.hollang.entity.Survey
 import swyg.hollang.service.HobbyTypeService
+import swyg.hollang.service.RecommendationHobbyService
 import swyg.hollang.service.RecommendationService
 
 @Component
 class RecommendationManager(
     private val recommendationService: RecommendationService,
-    private val hobbyTypeService: HobbyTypeService
+    private val hobbyTypeService: HobbyTypeService,
+    private val recommendationHobbyService: RecommendationHobbyService
 ) {
 
     @Transactional(readOnly = true)
@@ -40,4 +44,12 @@ class RecommendationManager(
             findRecommendation, findRecommendation.hobbyType, findRecommendation.recommendationHobbies)
     }
 
+    @Transactional
+    fun createRecommendationSurvey(recommendationId: Long, createRecommendationSurveyRequest: CreateRecommendationSurveyRequest) {
+        createRecommendationSurveyRequest.survey.hobbies.forEach { hobby ->
+            val recommendationHobby =
+                recommendationHobbyService.getRecommendationHobbyById(recommendationId, hobby.id)
+            recommendationHobby.survey = Survey(hobby.satisfaction)
+        }
+    }
 }

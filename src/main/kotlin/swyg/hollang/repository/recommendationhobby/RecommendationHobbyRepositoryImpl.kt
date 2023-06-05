@@ -1,5 +1,6 @@
 package swyg.hollang.repository.recommendationhobby
 
+import jakarta.persistence.EntityNotFoundException
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Repository
 import swyg.hollang.entity.RecommendationHobby
@@ -26,5 +27,10 @@ class RecommendationHobbyRepositoryImpl(
             ps.setObject(3, ZonedDateTime.now())
             ps.setObject(4, ZonedDateTime.now())
         }.size
+    }
+
+    override fun findByRecommendationIdAndHobbyId(recommendationId: Long, hobbyId: Long): RecommendationHobby {
+        return recommendationHobbyJpaRepository.findByRecommendationIdAndHobbyId(recommendationId, hobbyId)
+            ?: throw EntityNotFoundException("추천 ${recommendationId}번에 해당하는 취미 ${hobbyId}번을 찾을 수 없습니다")
     }
 }

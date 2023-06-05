@@ -22,5 +22,11 @@ class RecommendationHobby(
 ) : BaseTimeEntity() {
 
     @OneToOne(mappedBy = "recommendationHobby", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val survey: Survey? = null
+    var survey: Survey? = null
+        set(value) {
+            field = value
+            field?.recommendationHobby = this
+        }
+
+
 }
