@@ -14,6 +14,11 @@ class RecommendationRepositoryImpl(private val recommendationJpaRepository: Reco
 
     override fun findWithUserById(recommendationId: Long): Recommendation {
         return recommendationJpaRepository.findWithUserById(recommendationId)
-            ?: throw EntityNotFoundException("추천 $recommendationId 번을 찾을 수 없습니다.")
+            ?: throw EntityNotFoundException("추천 $recommendationId 번을 찾을 수 없습니다")
+    }
+
+    override fun findWithoutSurveyById(recommendationId: Long): Recommendation {
+        return recommendationJpaRepository.findWithoutSurveyById(recommendationId)
+            ?: throw EntityNotFoundException("추천 $recommendationId 번을 찾을 수 없습니다")
     }
 }

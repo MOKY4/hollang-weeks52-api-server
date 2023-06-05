@@ -21,4 +21,8 @@ class RecommendationService(private val recommendationRepository: Recommendation
     fun getRecommendationWithUserById(recommendationId: Long): Recommendation {
         return recommendationRepository.findWithUserById(recommendationId)
     }
+
+    fun getRecommendationWithoutSurveyById(recommendationId: Long) : Recommendation {
+        return recommendationRepository.findWithoutSurveyById(recommendationId)
+    }
 }

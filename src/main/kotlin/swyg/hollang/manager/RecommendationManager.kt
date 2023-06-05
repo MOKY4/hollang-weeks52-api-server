@@ -3,6 +3,7 @@ package swyg.hollang.manager
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import swyg.hollang.dto.RecommendHobbyAndTypesResponse
+import swyg.hollang.dto.RecommendShareResponse
 import swyg.hollang.service.HobbyTypeService
 import swyg.hollang.service.RecommendationService
 
@@ -28,6 +29,15 @@ class RecommendationManager(
             findRecommendation, findRecommendation.hobbyType, findRecommendation.recommendationHobbies, fitHobbyTypes
         )
 
+    }
+
+    @Transactional(readOnly = true)
+    fun getUserRecommendationWithoutFitHobbies(recommendationId: Long) : RecommendShareResponse {
+        val findRecommendation =
+            recommendationService.getRecommendationWithoutSurveyById(recommendationId = recommendationId)
+
+        return RecommendShareResponse(
+            findRecommendation, findRecommendation.hobbyType, findRecommendation.recommendationHobbies)
     }
 
 }

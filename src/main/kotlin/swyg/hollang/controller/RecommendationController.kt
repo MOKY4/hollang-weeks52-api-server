@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import swyg.hollang.dto.RecommendHobbyAndTypesResponse
+import swyg.hollang.dto.RecommendShareResponse
 import swyg.hollang.dto.common.SuccessResponse
 import swyg.hollang.manager.RecommendationManager
 import swyg.hollang.utils.WebProperties
@@ -25,4 +26,15 @@ class RecommendationController(private val recommendationManager: Recommendation
             ))
     }
 
+    @GetMapping("/{recommendationId}/shares")
+    fun getRecommendationShare(@PathVariable("recommendationId") recommendationId: Long)
+            : ResponseEntity<SuccessResponse<RecommendShareResponse>> {
+        val recommendShareResponse = recommendationManager.getUserRecommendationWithoutFitHobbies(recommendationId)
+        return ResponseEntity.ok()
+            .body(SuccessResponse(
+                HttpStatus.OK.name,
+                WebProperties.SUCCESS_RESPONSE_MESSAGE,
+                recommendShareResponse
+            ))
+    }
 }
