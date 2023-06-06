@@ -21,36 +21,35 @@ class TestServiceTest(
 
     @BeforeEach
     fun beforeEach() {
-        val test = swyg.hollang.entity.Test(1)
-        em.persist(test)
-
+        val questions: MutableSet<Question> = mutableSetOf()
         for(i in 1..12){
-            val question = Question(i.toLong(), test, "질문 $i", "https://question$i")
-            em.persist(question)
-
+            val answers: MutableSet<Answer> = mutableSetOf()
             for(j in 1..2){
-                val answer = Answer(question, j.toLong(), "질문 $i 답변 $j")
-                em.persist(answer)
-                question.answers.add(answer)
+                val answer = Answer(j.toLong(), "질문 $i 답변 $j")
+                answers.add(answer)
             }
 
-            test.questions.add(question)
+            val question = Question(i.toLong(),"질문 $i", answers)
+            questions.add(question)
         }
+
+        val test = swyg.hollang.entity.Test(1, questions)
+        em.persist(test)
     }
 
     @Test
-    fun findTestByVersion() {
+    fun findAndShuffleTestByVersion() {
         //given
         val validVersion: Long = 1
         val invalidVersion: Long = 2
 
         //when
-        val testResponse = testService.findShuffledTestByVersion(validVersion)
+        val testResponse = testService.findAndShuffleTestByVersion(validVersion)
 
         //then
         assertThat(testResponse.test.questions.size).isSameAs(12)
 
-        assertThatThrownBy { testService.findShuffledTestByVersion(invalidVersion) }
+        assertThatThrownBy { testService.findAndShuffleTestByVersion(invalidVersion) }
             .isExactlyInstanceOf(JpaObjectRetrievalFailureException::class.java)
     }
 }

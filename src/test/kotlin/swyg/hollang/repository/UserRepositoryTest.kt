@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.transaction.annotation.Transactional
-import swyg.hollang.dto.CreateUserRequest
 import swyg.hollang.entity.User
 import swyg.hollang.repository.user.UserRepository
 
@@ -21,12 +20,12 @@ class UserRepositoryTest(
     @Test
     fun save(){
         //given
-        val createUserRequest1 = CreateUserRequest("쨈")
-        val createUserRequest2 = CreateUserRequest("쟁")
+        val user1 = User("쨈")
+        val user2 = User("쟁")
 
         //when
-        val savedUser1 = userRepository.save(createUserRequest1)
-        val savedUser2 = userRepository.save(createUserRequest2)
+        val savedUser1 = userRepository.save(user1)
+        val savedUser2 = userRepository.save(user2)
 
         val findUser1 = em.createQuery("select u from User u where u.name = :name", User::class.java)
             .setParameter("name", "쨈")

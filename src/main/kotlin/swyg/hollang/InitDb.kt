@@ -1,102 +1,72 @@
 package swyg.hollang
 
-import com.amazonaws.auth.DefaultAWSCredentialsProviderChain
-import com.amazonaws.regions.Regions
-import com.amazonaws.services.s3.AmazonS3ClientBuilder
 import jakarta.annotation.PostConstruct
 import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
 import org.apache.poi.ss.usermodel.Workbook
 import org.apache.poi.ss.usermodel.WorkbookFactory
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Profile
+import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import swyg.hollang.entity.*
-import java.io.File
 import java.io.InputStream
 
 @Component
-@Profile(value = ["local", "dev"])
+@Profile(value = ["local"])
 class InitDb(private val initService: InitService) {
 
     @PostConstruct
     fun init() {
         initService.initTestData(1)
         initService.initHobbyTypeData()
-        initService.initCategoryData()
         initService.initHobbyData()
     }
 }
 
 @Component
 @Transactional
-@Profile(value = ["local", "dev"])
-class InitService(
-    @Value("\${spring.config.activate.on-profile}") private val activeProfile: String,
-    @Value("\${aws.s3.bucket}") private val bucketName: String,
-    @Value("\${aws.s3.init-data-key}") private val initDataKey: String,
-    @Value("\${aws.cloudfront.host}") private val cloudfrontHost: String) {
+@Profile(value = ["local"])
+class InitService {
 
     @PersistenceContext
     private lateinit var em: EntityManager
 
+    private final val INIT_DATA_PATH = "/static/initData.xlsx"
+    private final val IMG_URL = "https://test.com"
+
     fun initFile(): Workbook {
-        return if (activeProfile == "dev") {
-            val s3Client = AmazonS3ClientBuilder.standard()
-                .withCredentials(DefaultAWSCredentialsProviderChain())
-                .withRegion(Regions.AP_NORTHEAST_2)
-                .build()
+        val file = ClassPathResource(INIT_DATA_PATH).file
+        val inputStream: InputStream = file.inputStream()
 
-            val s3Object = s3Client.getObject(bucketName, initDataKey)
-            val excelInputStream = s3Object.objectContent
-
-            WorkbookFactory.create(excelInputStream)
-        } else {
-            val file = File(initDataKey)
-            val inputStream: InputStream = file.inputStream()
-
-            WorkbookFactory.create(inputStream)
-        }
+        return WorkbookFactory.create(inputStream)
     }
 
     fun initTestData(testVersion: Long) {
         val workbook = initFile()
 
         val sheet = workbook.getSheet("test")
-        val test = Test(testVersion)
+
+        val questions: MutableSet<Question> = mutableSetOf()
         for (rowIndex in 1..sheet.lastRowNum) {
             val row = sheet.getRow(rowIndex)
+            if(row.getCell(0) == null) break
 
             val number = rowIndex.toLong()
             val content = row.getCell(0).stringCellValue
-            val imageUrl =
-                "${cloudfrontHost}/images/question/question${rowIndex}.JPG"
-            val question = Question(number, test, content, imageUrl)
+            val answers: MutableSet<Answer> = mutableSetOf()
             for (cellIndex in row.firstCellNum + 1..row.firstCellNum + 2) {
                 val cell = row.getCell(cellIndex)
                 val cellValue = cell?.stringCellValue ?: ""
-                val answer = Answer(question, cellIndex.toLong(), cellValue)
-                question.answers.add(answer)
+                val answer = Answer(cellIndex.toLong(), cellValue)
+                answers.add(answer)
             }
-            test.questions.add(question)
+            val question = Question(number, content, answers)
+            questions.add(question)
         }
         //cascade type을 all로 해놨으니 영속성이 전이돼서 부모 엔티티를 영속화시키면 자식 엔티티도 영속화된다.
+        val test = Test(testVersion, questions)
         em.persist(test)
-    }
-
-    fun initCategoryData(){
-        val workbook = initFile()
-
-        val sheet = workbook.getSheet("category")
-        for (rowIndex in 1..sheet.lastRowNum) {
-            val row = sheet.getRow(rowIndex)
-
-            val name = row.getCell(0).stringCellValue
-            val level = row.getCell(1).numericCellValue.toInt()
-            val category = Category(name, level)
-            em.persist(category)
-        }
     }
 
     fun initHobbyData() {
@@ -105,18 +75,14 @@ class InitService(
         val sheet = workbook.getSheet("hobby")
         for (rowIndex in 1..sheet.lastRowNum) {
             val row = sheet.getRow(rowIndex)
+            if(row.getCell(0) == null) break
 
             val name = row.getCell(0).stringCellValue
-            val description = row.getCell(1).stringCellValue
-            val imageName = row.getCell(2).stringCellValue
-            val categoryName = row.getCell(3).stringCellValue
-            val findCategory = em.createQuery("select c from Category c where c.name = :name", Category::class.java)
-                .setParameter("name", categoryName)
-                .singleResult
-            val categories = mutableListOf<Category>(findCategory)
-            val imageUrl =
-                "${cloudfrontHost}/images/hobby/$imageName.png"
-            val hobby = Hobby(categories, name, description, imageUrl)
+            val summary = row.getCell(1).stringCellValue
+            val description = row.getCell(2).stringCellValue
+            val imageName = row.getCell(3).stringCellValue
+            val imageUrl = "${IMG_URL}/images/hobby/$imageName.png"
+            val hobby = Hobby(name, summary, description, imageUrl)
             em.persist(hobby)
         }
     }
@@ -127,13 +93,12 @@ class InitService(
         val sheet = workbook.getSheet("hobby_type")
         for (rowIndex in 1..sheet.lastRowNum) {
             val row = sheet.getRow(rowIndex)
+            if(row.getCell(0) == null) break
 
             val name = row.getCell(0).stringCellValue
             val description = row.getCell(1).stringCellValue
             val mbtiType = row.getCell(2).stringCellValue
-            val threeDimensionImageUrl =
-                "${cloudfrontHost}/images/hobby_type/${mbtiType}.gif"
-            val imageUrl = "${cloudfrontHost}/images/hobby_type/${mbtiType}.png"
+            val imageUrl = "${IMG_URL}/images/hobby_type/${mbtiType}.png"
             val fitHobbyTypes = mutableListOf(
                 row.getCell(3).stringCellValue,
                 row.getCell(4).stringCellValue,
@@ -142,9 +107,8 @@ class InitService(
             val hobbyType = HobbyType(
                 name,
                 description,
-                mbtiType,
-                threeDimensionImageUrl,
                 imageUrl,
+                mbtiType,
                 fitHobbyTypes
             )
             em.persist(hobbyType)

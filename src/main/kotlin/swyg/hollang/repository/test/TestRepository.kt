@@ -4,6 +4,6 @@ import swyg.hollang.entity.Test
 
 interface TestRepository {
 
-    fun findWithQuestionsAndAnswersByVersion(version: Long): Test
+    fun findByVersionWithQuestions(version: Long): Test
 
 }

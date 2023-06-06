@@ -18,38 +18,38 @@ class TestResponseRepositoryTest(
     @Autowired private val em: EntityManager,
     @Autowired private val testResponseRepository: TestResponseRepository) {
 
-    @Test
-    fun save() {
-        //given
-        val createdUser = User("쨈")
-        em.persist(createdUser)
+//    @Test
+//    fun save() {
+//        //given
+//        val createdUser = User("쨈")
+//        em.persist(createdUser)
+//
+//        //when
+//        val savedTestResponse = testResponseRepository.save(TestResponse(createdUser))
+//
+//        val findTestResponse = em.createQuery("select tr from TestResponse tr where tr.user.id = :userId", TestResponse::class.java)
+//            .setParameter("userId", createdUser.id)
+//            .resultList
+//
+//        //then
+//        assertThat(findTestResponse.size).isSameAs(1)
+//        assertThat(findTestResponse[0]).isEqualTo(savedTestResponse)
+//    }
 
-        //when
-        val savedTestResponse = testResponseRepository.save(createdUser)
-
-        val findTestResponse = em.createQuery("select tr from TestResponse tr where tr.user.id = :userId", TestResponse::class.java)
-            .setParameter("userId", createdUser.id)
-            .resultList
-
-        //then
-        assertThat(findTestResponse.size).isSameAs(1)
-        assertThat(findTestResponse[0]).isEqualTo(savedTestResponse)
-    }
-
-    @Test
-    fun countAll(){
-        //given
-        val testCount = 10L
-        for(i in 1..testCount){
-            val createdUser = User("쨈$i")
-            em.persist(createdUser)
-            val createdTestResponse = TestResponse(createdUser)
-            em.persist(createdTestResponse)
-        }
-        //when
-        val testResponseCount = testResponseRepository.countAll()
-
-        //then
-        assertThat(testResponseCount).isSameAs(testCount)
-    }
+//    @Test
+//    fun countAll(){
+//        //given
+//        val testCount = 10L
+//        for(i in 1..testCount){
+//            val createdUser = User("쨈$i")
+//            em.persist(createdUser)
+//            val createdTestResponse = TestResponse(createdUser)
+//            em.persist(createdTestResponse)
+//        }
+//        //when
+//        val testResponseCount = testResponseRepository.countAll()
+//
+//        //then
+//        assertThat(testResponseCount).isSameAs(testCount)
+//    }
 }

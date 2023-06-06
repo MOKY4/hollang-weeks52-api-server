@@ -24,9 +24,8 @@ class HobbyTypeRepositoryTest(
         val hobbyType = HobbyType(
             "홀랑 유형",
             "홀랑 유형 상세정보",
-            "ENFP",
-            "https://example.com/example.fbx",
             "https://example.com/example.png",
+            "ENFP",
             mutableListOf("ESTJ", "ESFP", "INFJ")
         )
         em.persist(hobbyType)
@@ -40,7 +39,7 @@ class HobbyTypeRepositoryTest(
         val mbtiType = "ENFP"
 
         //when
-        val findHobbyType = hobbyTypeRepository.findWithFitHobbyTypesByMbtiType(mbtiType)
+        val findHobbyType = hobbyTypeRepository.findByMbtiTypeWithFitHobbyTypes(mbtiType)
 
         //then
         assertThat(findHobbyType.mbtiType).isEqualTo("ENFP")
@@ -54,27 +53,24 @@ class HobbyTypeRepositoryTest(
         val hobbyType1 = HobbyType(
             "홀랑 유형 1",
             "홀랑 유형 1 상세정보",
-            "ESTJ",
-            "https://example.com/example.fbx",
             "https://example.com/example.png",
+            "ESTJ",
             mutableListOf("ESTJ", "ESFP", "INFJ")
         )
         em.persist(hobbyType1)
         val hobbyType2 = HobbyType(
             "홀랑 유형 2",
             "홀랑 유형 2 상세정보",
-            "ESFP",
-            "https://example.com/example.fbx",
             "https://example.com/example.png",
+            "ESFP",
             mutableListOf("ESTJ", "ESFP", "INFJ")
         )
         em.persist(hobbyType2)
         val hobbyType3 = HobbyType(
             "홀랑 유형 3",
             "홀랑 유형 3 상세정보",
-            "INFJ",
-            "https://example.com/example.fbx",
             "https://example.com/example.png",
+            "INFJ",
             mutableListOf("ESTJ", "ESFP", "INFJ")
         )
         em.persist(hobbyType3)

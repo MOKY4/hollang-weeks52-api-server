@@ -26,21 +26,20 @@ class TestControllerTest(
 
     @BeforeEach
     fun beforeEach() {
-        val test = swyg.hollang.entity.Test(1)
-        em.persist(test)
-
+        val questions: MutableSet<Question> = mutableSetOf()
         for(i in 1..12){
-            val question = Question(i.toLong(), test, "질문 $i", "https://question$i")
-            em.persist(question)
-
+            val answers: MutableSet<Answer> = mutableSetOf()
             for(j in 1..2){
-                val answer = Answer(question, j.toLong(), "질문 $i 답변 $j")
-                em.persist(answer)
-                question.answers.add(answer)
+                val answer = Answer(j.toLong(), "질문 $i 답변 $j")
+                answers.add(answer)
             }
 
-            test.questions.add(question)
+            val question = Question(i.toLong(),"질문 $i", answers)
+            questions.add(question)
         }
+
+        val test = swyg.hollang.entity.Test(1, questions)
+        em.persist(test)
     }
 
     @Test

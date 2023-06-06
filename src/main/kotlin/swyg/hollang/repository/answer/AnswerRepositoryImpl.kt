@@ -12,7 +12,7 @@ import swyg.hollang.entity.QTest.test
 class AnswerRepositoryImpl(
     private val jpaQueryFactory: JPAQueryFactory): AnswerRepository {
 
-    override fun findByQuestionNumberPairsWithTestVersion(
+    override fun findAllByQuestionAnswerPairsByTestVersion(
         questionAnswerPairs: List<Pair<Long, Long>>, testVersion: Long): List<Answer> {
 
         //빌더를 이용해서 여러개의 조건 조합을 만든다.

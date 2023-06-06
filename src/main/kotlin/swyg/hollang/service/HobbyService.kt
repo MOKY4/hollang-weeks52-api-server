@@ -12,17 +12,24 @@ import swyg.hollang.repository.hobby.HobbyRepository
 @Transactional(readOnly = true)
 class HobbyService(private val hobbyRepository: HobbyRepository) {
 
-    //추천받은 취미의 추천 카운트를 1씩 증가
-    fun addHobbiesRecommendCount(hobbies: MutableList<MutableMap<String, String>>): Int {
-        val names = hobbies.map { it["name"] ?: "" }
-        val updatedHobbyNumber = hobbyRepository.updateRecommendCountByName(names)
-        if(updatedHobbyNumber != hobbies.size){
+    fun addHobbiesRecommendCount(hobbies: MutableList<MutableMap<String, String>>): List<Hobby> {
+        val names = hobbies.map {
+            val name = it["name"] ?: ""
+            name.trim()
+            name
+        }
+        val findHobbies = getHobbiesByName(names)
+        if(findHobbies.size != 3){
             throw EntityNotFoundException("취미 ${names[0]}, ${names[1]}, ${names[2]} 중 하나를 찾을 수 없습니다.")
         }
-        return updatedHobbyNumber
+
+        //추천받은 취미의 추천 카운트를 1씩 증가
+        hobbyRepository.updateRecommendCountByNames(names)
+
+        return findHobbies
     }
 
-    fun getHobbyByName(names: List<String>): List<Hobby> {
+    fun getHobbiesByName(names: List<String>): List<Hobby> {
         return hobbyRepository.findByNameIsIn(names)
     }
 
