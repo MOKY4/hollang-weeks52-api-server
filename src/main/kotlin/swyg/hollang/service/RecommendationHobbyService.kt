@@ -9,11 +9,7 @@ import swyg.hollang.repository.recommendationhobby.RecommendationHobbyRepository
 @Transactional(readOnly = true)
 class RecommendationHobbyService(private val recommendationHobbyRepository: RecommendationHobbyRepository) {
 
-    fun createRecommendationHobbies(recommendationHobbies: List<RecommendationHobby>) : Int {
-        return recommendationHobbyRepository.batchInsert(recommendationHobbies)
-    }
-
-    fun getRecommendationHobbyById(recommendationId: Long, hobbyId: Long) : RecommendationHobby {
-        return recommendationHobbyRepository.findByRecommendationIdAndHobbyId(recommendationId, hobbyId)
+    fun getRecommendationHobbyById(recommendationId: Long) : List<RecommendationHobby> {
+        return recommendationHobbyRepository.findAllByRecommendationId(recommendationId)
     }
 }

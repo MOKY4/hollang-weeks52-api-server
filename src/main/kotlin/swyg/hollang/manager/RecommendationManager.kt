@@ -1,5 +1,6 @@
 package swyg.hollang.manager
 
+import jakarta.persistence.EntityNotFoundException
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import swyg.hollang.dto.CreateRecommendationSurveyRequest
@@ -46,10 +47,15 @@ class RecommendationManager(
 
     @Transactional
     fun createRecommendationSurvey(recommendationId: Long, createRecommendationSurveyRequest: CreateRecommendationSurveyRequest) {
+        val recommendationHobbies =
+            recommendationHobbyService.getRecommendationHobbyById(recommendationId)
+
         createRecommendationSurveyRequest.survey.hobbies.forEach { hobby ->
-            val recommendationHobby =
-                recommendationHobbyService.getRecommendationHobbyById(recommendationId, hobby.id)
+            val recommendationHobby = recommendationHobbies.find { it.hobby.id == hobby.id }
+                ?: throw EntityNotFoundException("취미 ${hobby.id}번이 존재하지 않습니다")
+
             recommendationHobby.survey = Survey(hobby.satisfaction)
         }
+
     }
 }

@@ -12,8 +12,8 @@ interface RecommendationJpaRepository: JpaRepository<Recommendation, Long> {
             "join fetch r.recommendationHobbies rh " +
             "left join fetch rh.hobby h " +
             "left join fetch rh.survey s " +
-            "where r.id = :recommendationId")
-    fun findWithUserById(recommendationId: Long): Recommendation?
+            "where r.id = :recommendationId ")
+    fun findByIdWithUserAndHobbyTypeAndHobbiesAndSurvey(recommendationId: Long): Recommendation?
 
     @Query("select distinct r from Recommendation r " +
             "join fetch r.testResponse.user u " +
@@ -21,5 +21,5 @@ interface RecommendationJpaRepository: JpaRepository<Recommendation, Long> {
             "join fetch r.recommendationHobbies rh " +
             "left join fetch rh.hobby h " +
             "where r.id = :recommendationId")
-    fun findWithoutSurveyById(recommendationId: Long): Recommendation?
+    fun findByIdWithUserAndHobbyTypeAndHobbies(recommendationId: Long): Recommendation?
 }

@@ -14,11 +14,4 @@ class Survey(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "survey_id")
     val id: Long? = null
-
-    @OneToOne
-    @JoinColumns(
-        JoinColumn(name = "hobby_id", nullable = false, updatable = false),
-        JoinColumn(name = "recommendation_id", nullable = false, updatable = false)
-    )
-    var recommendationHobby: RecommendationHobby? = null
 }

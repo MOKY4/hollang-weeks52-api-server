@@ -8,13 +8,13 @@ import swyg.hollang.entity.HobbyType
 class HobbyTypeRepositoryImpl(private val hobbyTypeJpaRepository: HobbyTypeJpaRepository)
     : HobbyTypeRepository {
 
-    override fun findHobbyTypeByMbtiType(mbtiType: String): HobbyType {
-        return hobbyTypeJpaRepository.findHobbyTypeByMbtiType(mbtiType)
+    override fun findByMbtiType(mbtiType: String): HobbyType {
+        return hobbyTypeJpaRepository.findByMbtiType(mbtiType)
             ?: throw EntityNotFoundException("홀랑 유형 $mbtiType 을 찾을 수 없습니다.")
     }
 
-    override fun findWithFitHobbyTypesByMbtiType(mbtiType: String): HobbyType {
-        return hobbyTypeJpaRepository.findWithFitHobbyTypesByMbtiType(mbtiType)
+    override fun findByMbtiTypeWithFitHobbyTypes(mbtiType: String): HobbyType {
+        return hobbyTypeJpaRepository.findByMbtiTypeWithFitHobbyTypes(mbtiType)
             ?: throw EntityNotFoundException("홀랑 유형 $mbtiType 을 찾을 수 없습니다.")
     }
 

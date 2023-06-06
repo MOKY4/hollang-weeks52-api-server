@@ -24,7 +24,7 @@ class HobbyService(private val hobbyRepository: HobbyRepository) {
         }
 
         //추천받은 취미의 추천 카운트를 1씩 증가
-        hobbyRepository.updateRecommendCountByName(names)
+        hobbyRepository.updateRecommendCountByNames(names)
 
         return findHobbies
     }

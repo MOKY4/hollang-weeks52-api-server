@@ -10,6 +10,13 @@ plugins {
     kotlin("kapt") version "1.7.21"
 }
 
+// plugins, dependencies와 같은 Level (build.gradle 최상단)
+allOpen {
+    annotation("javax.persistence.Entity")
+    annotation("javax.persistence.MappedSuperclass")
+    annotation("javax.persistence.Embeddable")
+}
+
 group = "swyg"
 version = "1.0.0"
 java.sourceCompatibility = JavaVersion.VERSION_17

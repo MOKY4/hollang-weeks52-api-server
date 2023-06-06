@@ -6,7 +6,7 @@ interface RecommendationRepository {
 
     fun save(recommendation: Recommendation): Recommendation
 
-    fun findWithUserById(recommendationId: Long): Recommendation
+    fun findByIdWithUserAndHobbyTypeAndHobbiesAndSurvey(recommendationId: Long): Recommendation
 
-    fun findWithoutSurveyById(recommendationId: Long): Recommendation
+    fun findByIdWithUserAndHobbyTypeAndHobbies(recommendationId: Long): Recommendation
 }

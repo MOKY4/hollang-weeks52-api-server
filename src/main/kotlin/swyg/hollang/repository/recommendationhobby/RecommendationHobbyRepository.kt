@@ -6,7 +6,7 @@ interface RecommendationHobbyRepository {
 
     fun save(recommendationHobby: RecommendationHobby): RecommendationHobby
 
-    fun batchInsert(recommendationHobbies: List<RecommendationHobby>) : Int
+    fun saveAll(recommendationHobbies: List<RecommendationHobby>): List<RecommendationHobby>
 
-    fun findByRecommendationIdAndHobbyId(recommendationId: Long, hobbyId: Long) : RecommendationHobby
+    fun findAllByRecommendationId(recommendationId: Long) : List<RecommendationHobby>
 }
