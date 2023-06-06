@@ -17,6 +17,6 @@ class User (
     val id: Long? = null
 
     @OneToOne(mappedBy = "user", cascade = [ALL], orphanRemoval = true)
-    val testResponse: TestResponse? = null
+    var testResponse: TestResponse? = null
 
 }

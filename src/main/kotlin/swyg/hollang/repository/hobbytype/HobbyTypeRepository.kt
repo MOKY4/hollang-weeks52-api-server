@@ -4,9 +4,9 @@ import swyg.hollang.entity.HobbyType
 
 interface HobbyTypeRepository {
 
-    fun findHobbyTypeByMbtiType(mbtiType: String): HobbyType
+    fun findByMbtiType(mbtiType: String): HobbyType
 
-    fun findWithFitHobbyTypesByMbtiType(mbtiType: String): HobbyType
+    fun findByMbtiTypeWithFitHobbyTypes(mbtiType: String): HobbyType
 
     fun findByMbtiTypeIsIn(mbtiTypes: List<String>): List<HobbyType>
 

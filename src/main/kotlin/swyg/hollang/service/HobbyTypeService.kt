@@ -10,11 +10,11 @@ import swyg.hollang.repository.hobbytype.HobbyTypeRepository
 class HobbyTypeService(private val hobbyTypeRepository: HobbyTypeRepository) {
 
     fun getHobbyTypeByMbtiType(mbtiType: String): HobbyType {
-        return hobbyTypeRepository.findHobbyTypeByMbtiType(mbtiType)
+        return hobbyTypeRepository.findByMbtiType(mbtiType)
     }
 
     fun getHobbyTypeWithFitHobbyTypeByMbtiType(mbtiType: String): HobbyType {
-        return hobbyTypeRepository.findWithFitHobbyTypesByMbtiType(mbtiType)
+        return hobbyTypeRepository.findByMbtiTypeWithFitHobbyTypes(mbtiType)
     }
 
     fun getHobbyTypesByMbtiTypes(mbtiTypes: List<String>): List<HobbyType> {

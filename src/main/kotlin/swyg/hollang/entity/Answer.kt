@@ -5,11 +5,7 @@ import jakarta.persistence.FetchType.*
 import swyg.hollang.entity.common.BaseTimeEntity
 
 @Entity
-class Answer (
-
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "question_id", nullable = false)
-    val question: Question,
+class Answer(
 
     @Column(name = "answer_number", nullable = false)
     val number: Long,
@@ -23,4 +19,7 @@ class Answer (
     @Column(name = "answer_id")
     val id: Long? = null
 
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "question_id", nullable = false)
+    var question: Question? = null
 }

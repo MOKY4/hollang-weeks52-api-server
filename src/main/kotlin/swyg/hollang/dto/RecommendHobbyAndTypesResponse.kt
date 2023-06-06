@@ -24,7 +24,7 @@ data class RecommendHobbyAndTypesResponse(
     ) {
         val id: Long = recommendationEntity.id!!
         val didSurvey: Boolean = hobbiesEntity[0].survey != null
-        val user: UserDto = UserDto(recommendationEntity.testResponse.user)
+        val user: UserDto = UserDto(recommendationEntity.testResponse!!.user!!)
         val hobbyType: HobbyTypeDto = HobbyTypeDto(hobbyTypeEntity)
         val hobbies: List<HobbyDto> = hobbiesEntity.map { HobbyDto(it.hobby) }
         val fitHobbyTypes: List<HobbyTypeDto> = fitHobbyTypesEntity.map { HobbyTypeDto(it) }

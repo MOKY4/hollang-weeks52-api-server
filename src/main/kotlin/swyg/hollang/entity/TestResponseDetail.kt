@@ -6,16 +6,15 @@ import swyg.hollang.entity.id.TestResponseDetailId
 
 @Entity
 @IdClass(TestResponseDetailId::class)
-class TestResponseDetail (
-
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "test_response_id", nullable = false, updatable = false)
-    val testResponse: TestResponse,
-
+class TestResponseDetail(
     @Id
     @ManyToOne
     @JoinColumn(name = "answer_id", nullable = false, updatable = false)
     val answer: Answer
+) : BaseTimeEntity() {
 
-) : BaseTimeEntity()
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "test_response_id", nullable = false, updatable = false)
+    var testResponse: TestResponse? = null
+}

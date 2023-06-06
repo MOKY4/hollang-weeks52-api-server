@@ -7,7 +7,8 @@ spring:
       on-profile: local
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/hollang_local
+    # Batch Insert 옵션 ON
+    url: jdbc:mysql://127.0.0.1:3306/hollang_local?rewriteBatchedStatements=true&profileSQL=true&logger=Slf4JLogger&maxQuerySizeToLog=1000
     username: root
     password: 11111111
   jpa:

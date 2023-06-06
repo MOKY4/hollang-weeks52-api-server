@@ -9,4 +9,8 @@ class SurveyRepositoryImpl(private val surveyJpaRepository: SurveyJpaRepository)
     override fun save(survey: Survey): Survey {
         return surveyJpaRepository.save(survey)
     }
+
+    override fun saveAll(surveys: List<Survey>): List<Survey> {
+        return surveyJpaRepository.saveAll(surveys)
+    }
 }

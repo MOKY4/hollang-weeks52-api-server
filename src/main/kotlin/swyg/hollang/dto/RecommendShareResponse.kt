@@ -20,7 +20,7 @@ data class RecommendShareResponse(
         @JsonIgnore val hobbiesEntity: List<RecommendationHobby>
     ) {
         val id: Long = recommendationEntity.id!!
-        val user: UserDto = UserDto(recommendationEntity.testResponse.user)
+        val user: UserDto = UserDto(recommendationEntity.testResponse!!.user!!)
         val hobbyType: HobbyTypeDto = HobbyTypeDto(hobbyTypeEntity)
         val hobbies: List<HobbyDto> = hobbiesEntity.map { HobbyDto(it.hobby) }
     }

@@ -10,23 +10,18 @@ import swyg.hollang.entity.id.RecommendationHobbyId
 class RecommendationHobby(
 
     @Id
-    @ManyToOne
-    @JoinColumn(name = "recommendation_id", nullable = false, updatable = false)
-    val recommendation: Recommendation,
-
-    @Id
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "hobby_id", nullable = false, updatable = false)
     val hobby: Hobby,
 
 ) : BaseTimeEntity() {
 
-    @OneToOne(mappedBy = "recommendationHobby", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @Id
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "recommendation_id", nullable = false, updatable = false)
+    var recommendation: Recommendation? = null
+
+    @OneToOne(fetch = LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
+    @JoinColumn(name = "survey_id", nullable = true, updatable = true)
     var survey: Survey? = null
-        set(value) {
-            field = value
-            field?.recommendationHobby = this
-        }
-
-
 }

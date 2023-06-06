@@ -46,23 +46,26 @@ class InitService {
         val workbook = initFile()
 
         val sheet = workbook.getSheet("test")
-        val test = Test(testVersion)
+
+        val questions: MutableSet<Question> = mutableSetOf()
         for (rowIndex in 1..sheet.lastRowNum) {
             val row = sheet.getRow(rowIndex)
             if(row.getCell(0) == null) break
 
             val number = rowIndex.toLong()
             val content = row.getCell(0).stringCellValue
-            val question = Question(number, test, content)
+            val answers: MutableSet<Answer> = mutableSetOf()
             for (cellIndex in row.firstCellNum + 1..row.firstCellNum + 2) {
                 val cell = row.getCell(cellIndex)
                 val cellValue = cell?.stringCellValue ?: ""
-                val answer = Answer(question, cellIndex.toLong(), cellValue)
-                question.answers.add(answer)
+                val answer = Answer(cellIndex.toLong(), cellValue)
+                answers.add(answer)
             }
-            test.questions.add(question)
+            val question = Question(number, content, answers)
+            questions.add(question)
         }
         //cascade type을 all로 해놨으니 영속성이 전이돼서 부모 엔티티를 영속화시키면 자식 엔티티도 영속화된다.
+        val test = Test(testVersion, questions)
         em.persist(test)
     }
 

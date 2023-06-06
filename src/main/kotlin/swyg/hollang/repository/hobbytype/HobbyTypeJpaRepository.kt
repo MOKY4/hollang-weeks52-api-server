@@ -6,10 +6,12 @@ import swyg.hollang.entity.HobbyType
 
 interface HobbyTypeJpaRepository: JpaRepository<HobbyType, Long> {
 
-    fun findHobbyTypeByMbtiType(mbtiType: String): HobbyType?
+    fun findByMbtiType(mbtiType: String): HobbyType?
 
-    @Query("select ht from HobbyType ht join fetch ht.fitHobbyTypes where ht.mbtiType = :mbtiType")
-    fun findWithFitHobbyTypesByMbtiType(mbtiType: String): HobbyType?
+    @Query("select ht from HobbyType ht " +
+            "join fetch ht.fitHobbyTypes " +
+            "where ht.mbtiType = :mbtiType")
+    fun findByMbtiTypeWithFitHobbyTypes(mbtiType: String): HobbyType?
 
     fun findByMbtiTypeIsIn(mbtiTypes: List<String>): List<HobbyType>
 

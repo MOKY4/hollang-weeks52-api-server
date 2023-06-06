@@ -12,13 +12,13 @@ class RecommendationRepositoryImpl(private val recommendationJpaRepository: Reco
         return recommendationJpaRepository.save(recommendation)
     }
 
-    override fun findWithUserById(recommendationId: Long): Recommendation {
-        return recommendationJpaRepository.findWithUserById(recommendationId)
+    override fun findByIdWithUserAndHobbyTypeAndHobbiesAndSurvey(recommendationId: Long): Recommendation {
+        return recommendationJpaRepository.findByIdWithUserAndHobbyTypeAndHobbiesAndSurvey(recommendationId)
             ?: throw EntityNotFoundException("추천 $recommendationId 번을 찾을 수 없습니다")
     }
 
-    override fun findWithoutSurveyById(recommendationId: Long): Recommendation {
-        return recommendationJpaRepository.findWithoutSurveyById(recommendationId)
+    override fun findByIdWithUserAndHobbyTypeAndHobbies(recommendationId: Long): Recommendation {
+        return recommendationJpaRepository.findByIdWithUserAndHobbyTypeAndHobbies(recommendationId)
             ?: throw EntityNotFoundException("추천 $recommendationId 번을 찾을 수 없습니다")
     }
 }
