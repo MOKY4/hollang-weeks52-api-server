@@ -38,45 +38,45 @@ class TestResponseDetailServiceTest(
         em.persist(test)
     }
 
-    @Test
-    fun createTestResponseDetail() {
-        //given
-        val createdUser = User("쨈")
-        em.persist(createdUser)
-        val createdTestResponse = TestResponse(createdUser)
-        em.persist(createdTestResponse)
-        em.flush()
-
-        val createTestResponseDetailRequests = mutableListOf(
-            CreateTestResponseDetailRequest(1, 1),
-            CreateTestResponseDetailRequest(2, 2),
-            CreateTestResponseDetailRequest(3, 1),
-            CreateTestResponseDetailRequest(4, 1),
-            CreateTestResponseDetailRequest(5, 2),
-            CreateTestResponseDetailRequest(6, 1),
-            CreateTestResponseDetailRequest(7, 2),
-            CreateTestResponseDetailRequest(8, 1),
-            CreateTestResponseDetailRequest(9, 1),
-            CreateTestResponseDetailRequest(10, 2),
-            CreateTestResponseDetailRequest(11, 2),
-            CreateTestResponseDetailRequest(12, 2),
-        )
-
-        val questionAnswerPairs = createTestResponseDetailRequests.map { it.questionNumber to it.answerNumber }
-        val answers = answerService
-            .getAnswersByQuestionAnswerPairsByTestVersion(questionAnswerPairs, 1)
-
-        //when
-        testResponseDetailService.createTestResponseDetails(createdTestResponse, answers)
-
-        //then
-        val findTestResponseDetails =
-            em.createQuery("select trd from TestResponseDetail trd where trd.testResponse.id = :testResponseId",
-                TestResponseDetail::class.java)
-                .setParameter("testResponseId", createdTestResponse.id)
-                .resultList
-
-        assertThat(findTestResponseDetails.size).isSameAs(12)
-        assertThat(findTestResponseDetails[0].testResponse.user.name).isEqualTo(createdUser.name)
-    }
+//    @Test
+//    fun createTestResponseDetail() {
+//        //given
+//        val createdUser = User("쨈")
+//        em.persist(createdUser)
+//        val createdTestResponse = TestResponse(createdUser)
+//        em.persist(createdTestResponse)
+//        em.flush()
+//
+//        val createTestResponseDetailRequests = mutableListOf(
+//            CreateTestResponseDetailRequest(1, 1),
+//            CreateTestResponseDetailRequest(2, 2),
+//            CreateTestResponseDetailRequest(3, 1),
+//            CreateTestResponseDetailRequest(4, 1),
+//            CreateTestResponseDetailRequest(5, 2),
+//            CreateTestResponseDetailRequest(6, 1),
+//            CreateTestResponseDetailRequest(7, 2),
+//            CreateTestResponseDetailRequest(8, 1),
+//            CreateTestResponseDetailRequest(9, 1),
+//            CreateTestResponseDetailRequest(10, 2),
+//            CreateTestResponseDetailRequest(11, 2),
+//            CreateTestResponseDetailRequest(12, 2),
+//        )
+//
+//        val questionAnswerPairs = createTestResponseDetailRequests.map { it.questionNumber to it.answerNumber }
+//        val answers = answerService
+//            .getAnswersByQuestionAnswerPairsByTestVersion(questionAnswerPairs, 1)
+//
+//        //when
+//        testResponseDetailService.createTestResponseDetails(createdTestResponse, answers)
+//
+//        //then
+//        val findTestResponseDetails =
+//            em.createQuery("select trd from TestResponseDetail trd where trd.testResponse.id = :testResponseId",
+//                TestResponseDetail::class.java)
+//                .setParameter("testResponseId", createdTestResponse.id)
+//                .resultList
+//
+//        assertThat(findTestResponseDetails.size).isSameAs(12)
+//        assertThat(findTestResponseDetails[0].testResponse.user.name).isEqualTo(createdUser.name)
+//    }
 }

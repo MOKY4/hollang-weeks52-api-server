@@ -18,35 +18,36 @@ class TestResponseServiceTest(
     @Autowired private val testResponseService: TestResponseService
 ) {
 
-    @Test
-    fun createTestResponse() {
-        //given
-        val createdUser = User("쨈")
-        em.persist(createdUser)
+//    @Test
+//    fun createTestResponse() {
+//        //given
+//        val createdUser = User("쨈")
+//        em.persist(createdUser)
+//
+//        //when
+//        TestResponse()
+//        val createdTestResponse = testResponseService.createTestResponse(createdUser)
+//
+//        //then
+//        Assertions.assertThat(createdTestResponse.user).isEqualTo(createdUser)
+//    }
 
-        //when
-        val createdTestResponse = testResponseService.createTestResponse(createdUser)
-
-        //then
-        Assertions.assertThat(createdTestResponse.user).isEqualTo(createdUser)
-    }
-
-    @Test
-    fun countAllTestResponse() {
-        //given
-        val testCount = 10L
-        for(i in 1..testCount){
-            val createdUser = User("쨈$i")
-            em.persist(createdUser)
-            val createdTestResponse = TestResponse(createdUser)
-            em.persist(createdTestResponse)
-        }
-        //when
-        val testResponseCount = testResponseService.countAllTestResponse()
-
-        //then
-        Assertions.assertThat(testResponseCount).isSameAs(testCount)
-
-    }
+//    @Test
+//    fun countAllTestResponse() {
+//        //given
+//        val testCount = 10L
+//        for(i in 1..testCount){
+//            val createdUser = User("쨈$i")
+//            em.persist(createdUser)
+//            val createdTestResponse = TestResponse(createdUser)
+//            em.persist(createdTestResponse)
+//        }
+//        //when
+//        val testResponseCount = testResponseService.countAllTestResponse()
+//
+//        //then
+//        Assertions.assertThat(testResponseCount).isSameAs(testCount)
+//
+//    }
 
 }

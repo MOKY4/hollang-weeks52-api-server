@@ -12,7 +12,6 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.transaction.annotation.Transactional
-import swyg.hollang.entity.Category
 import swyg.hollang.entity.Hobby
 
 @Transactional
@@ -29,9 +28,9 @@ class HobbyControllerTest(
 
         for (i in 1..40) {
             val hobby = Hobby(
-                mutableListOf(Category("category$i", 1)),
                 "홀랑 $i",
                 "홀랑 $i 상세정보",
+                "default",
                 "https://example.com/hollang$i.png"
             )
             hobby.recommendCount = 40L - i

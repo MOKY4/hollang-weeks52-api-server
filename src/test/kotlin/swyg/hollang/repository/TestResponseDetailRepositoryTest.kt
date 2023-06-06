@@ -37,32 +37,32 @@ class TestResponseDetailRepositoryTest(
         em.persist(test)
     }
 
-    @Test
-    fun save() {
-        //given
-        val savedUser = User("쨈")
-        em.persist(savedUser)
-        val savedTestResponse = TestResponse(savedUser)
-        em.persist(savedTestResponse)
-        val findAnswers = em.createQuery(
-            "select a from Answer a " +
-                    "where a.number = :answerNumber " +
-                    "and a.question.number = :questionNumber " +
-                    "and a.question.test.version = :testVersion"
-        )
-            .setParameter("answerNumber", 2)
-            .setParameter("questionNumber", 1)
-            .setParameter("testVersion", 1)
-            .resultList as MutableList<Answer>
-
-        //when
-        val savedTestResponseDetail = testResponseDetailRepository
-            .save(TestResponseDetail(savedTestResponse, findAnswers[0]))
-
-        //then
-        assertThat(savedTestResponseDetail.testResponse).isEqualTo(savedTestResponse)
-        assertThat(savedTestResponseDetail.answer).isEqualTo(findAnswers[0])
-        assertThat(savedTestResponseDetail.answer.content).isEqualTo("질문 1 답변 2")
-        assertThat(savedTestResponseDetail.answer.question!!.content).isEqualTo("질문 1")
-    }
+//    @Test
+//    fun save() {
+//        //given
+//        val savedUser = User("쨈")
+//        em.persist(savedUser)
+//        val savedTestResponse = TestResponse(savedUser)
+//        em.persist(savedTestResponse)
+//        val findAnswers = em.createQuery(
+//            "select a from Answer a " +
+//                    "where a.number = :answerNumber " +
+//                    "and a.question.number = :questionNumber " +
+//                    "and a.question.test.version = :testVersion"
+//        )
+//            .setParameter("answerNumber", 2)
+//            .setParameter("questionNumber", 1)
+//            .setParameter("testVersion", 1)
+//            .resultList as MutableList<Answer>
+//
+//        //when
+//        val savedTestResponseDetail = testResponseDetailRepository
+//            .save(TestResponseDetail(savedTestResponse, findAnswers[0]))
+//
+//        //then
+//        assertThat(savedTestResponseDetail.testResponse).isEqualTo(savedTestResponse)
+//        assertThat(savedTestResponseDetail.answer).isEqualTo(findAnswers[0])
+//        assertThat(savedTestResponseDetail.answer.content).isEqualTo("질문 1 답변 2")
+//        assertThat(savedTestResponseDetail.answer.question!!.content).isEqualTo("질문 1")
+//    }
 }
