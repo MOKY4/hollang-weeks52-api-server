@@ -8,21 +8,19 @@ import swyg.hollang.dto.RecommendHobbyAndTypesResponse
 import swyg.hollang.dto.RecommendShareResponse
 import swyg.hollang.entity.Survey
 import swyg.hollang.service.HobbyTypeService
-import swyg.hollang.service.RecommendationHobbyService
 import swyg.hollang.service.RecommendationService
 
 @Component
 class RecommendationManager(
     private val recommendationService: RecommendationService,
-    private val hobbyTypeService: HobbyTypeService,
-    private val recommendationHobbyService: RecommendationHobbyService
+    private val hobbyTypeService: HobbyTypeService
 ) {
 
     @Transactional(readOnly = true)
     fun getUserRecommendation(recommendationId: Long) : RecommendHobbyAndTypesResponse {
         //추천 id로 추천 결과를 가져온다.
         val findRecommendation = recommendationService
-            .getRecommendationWithUserById(recommendationId = recommendationId)
+            .getWithUserAndHobbyTypeAndHobbiesAndSurveyById(recommendationId = recommendationId)
 
         val hobbyType = findRecommendation.hobbyType
 
@@ -31,7 +29,7 @@ class RecommendationManager(
             .getHobbyTypesByMbtiTypes(mbtiTypes = hobbyType.fitHobbyTypes)
 
         return RecommendHobbyAndTypesResponse(
-            findRecommendation, findRecommendation.hobbyType, findRecommendation.recommendationHobbies, fitHobbyTypes
+            findRecommendation, fitHobbyTypes
         )
 
     }
@@ -39,23 +37,20 @@ class RecommendationManager(
     @Transactional(readOnly = true)
     fun getUserRecommendationWithoutFitHobbies(recommendationId: Long) : RecommendShareResponse {
         val findRecommendation =
-            recommendationService.getRecommendationWithoutSurveyById(recommendationId = recommendationId)
+            recommendationService.getWithUserAndHobbyTypeAndHobbiesById(recommendationId = recommendationId)
 
-        return RecommendShareResponse(
-            findRecommendation, findRecommendation.hobbyType, findRecommendation.recommendationHobbies)
+        return RecommendShareResponse(findRecommendation)
     }
 
     @Transactional
     fun createRecommendationSurvey(recommendationId: Long, createRecommendationSurveyRequest: CreateRecommendationSurveyRequest) {
-        val recommendationHobbies =
-            recommendationHobbyService.getRecommendationHobbyById(recommendationId)
+        val recommendation = recommendationService.getWithHobbiesById(recommendationId)
 
         createRecommendationSurveyRequest.survey.hobbies.forEach { hobby ->
-            val recommendationHobby = recommendationHobbies.find { it.hobby.id == hobby.id }
+            val recommendationHobby = recommendation.recommendationHobbies.find { it.hobby.id == hobby.id }
                 ?: throw EntityNotFoundException("취미 ${hobby.id}번이 존재하지 않습니다")
 
-            recommendationHobby.survey = Survey(hobby.satisfaction)
+            recommendationHobby.survey = Survey(hobby.satisfaction, recommendationHobby)
         }
-
     }
 }

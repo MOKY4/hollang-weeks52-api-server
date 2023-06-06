@@ -9,11 +9,19 @@ import swyg.hollang.repository.recommendation.RecommendationRepository
 @Transactional(readOnly = true)
 class RecommendationService(private val recommendationRepository: RecommendationRepository) {
 
-    fun getRecommendationWithUserById(recommendationId: Long): Recommendation {
+    fun save(recommendation: Recommendation): Recommendation {
+        return recommendationRepository.save(recommendation)
+    }
+
+    fun getWithUserAndHobbyTypeAndHobbiesAndSurveyById(recommendationId: Long): Recommendation {
         return recommendationRepository.findByIdWithUserAndHobbyTypeAndHobbiesAndSurvey(recommendationId)
     }
 
-    fun getRecommendationWithoutSurveyById(recommendationId: Long) : Recommendation {
+    fun getWithUserAndHobbyTypeAndHobbiesById(recommendationId: Long) : Recommendation {
         return recommendationRepository.findByIdWithUserAndHobbyTypeAndHobbies(recommendationId)
+    }
+
+    fun getWithHobbiesById(recommendationId: Long) : Recommendation {
+        return recommendationRepository.findByIdWithHobbies(recommendationId)
     }
 }

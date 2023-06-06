@@ -13,10 +13,7 @@ interface RecommendationHobbyJpaRepository : JpaRepository<RecommendationHobby, 
     @EntityGraph(attributePaths = [
         "hobby",
         "survey",
-        "recommendation",
-        "recommendation.testResponse",
-        "recommendation.testResponse.user",
-        "recommendation.hobbyType"
+        "recommendation"
     ])
     fun findAllByRecommendationId(recommendationId: Long) : List<RecommendationHobby>
 }

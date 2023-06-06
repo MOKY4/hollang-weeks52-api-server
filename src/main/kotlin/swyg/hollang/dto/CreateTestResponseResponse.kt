@@ -6,7 +6,7 @@ import swyg.hollang.entity.TestResponse
 import swyg.hollang.entity.User
 
 data class CreateTestResponseResponse(@JsonIgnore val testResponseEntity: TestResponse) {
-    val user: UserDto = UserDto(testResponseEntity.user!!)
+    val user: UserDto = UserDto(testResponseEntity.user)
     val recommendation: RecommendationDto = RecommendationDto(testResponseEntity.recommendation!!)
 
     inner class UserDto (@JsonIgnore val userEntity: User) {

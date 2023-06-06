@@ -11,4 +11,8 @@ class TestResponseDetailRepositoryImpl(
     override fun save(testResponseDetail: TestResponseDetail): TestResponseDetail {
         return testResponseDetailJpaRepository.save(testResponseDetail)
     }
+
+    override fun saveAll(testResponseDetails: List<TestResponseDetail>): List<TestResponseDetail> {
+        return testResponseDetailJpaRepository.saveAll(testResponseDetails)
+    }
 }
