@@ -14,6 +14,9 @@ class RecommendationHobby(
     @JoinColumn(name = "hobby_id", nullable = false, updatable = false)
     val hobby: Hobby,
 
+    @Column(name = "ranking", nullable = false, updatable = false)
+    val ranking: Int
+
 ) : BaseTimeEntity() {
 
     @Id

@@ -39,7 +39,10 @@ class TestResponseManager(
 
         //추천 취미 엔티티 생성
         val recommendationHobbies = hobbies.map { hobby ->
-            RecommendationHobby(hobby)
+            val ranking = createRecommendationResultResponse.hobbies.find { h ->
+                h["name"]!! == hobby.name
+            }?.get("ranking") as Int
+            RecommendationHobby(hobby, ranking)
         } as MutableList<RecommendationHobby>
 
         //추천받은 취미 유형 찾기
