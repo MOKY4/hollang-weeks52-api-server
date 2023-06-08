@@ -6,9 +6,9 @@ import jakarta.validation.constraints.NotNull
 
 data class CreateRecommendationSurveyRequest(@field:Valid val survey: CreateSurveyRequest)
 
-data class CreateSurveyRequest(@field:Valid val hobbies: List<HobbyInfo>)
+data class CreateSurveyRequest(@field:Valid val hobbies: List<HobbyDto>)
 
-data class HobbyInfo(
+data class HobbyDto(
     @field:NotNull(message = "취미 id를 입력해주세요")
     val id: Long,
 

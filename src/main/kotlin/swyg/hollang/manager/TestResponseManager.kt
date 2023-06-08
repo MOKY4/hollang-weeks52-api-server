@@ -19,14 +19,14 @@ class TestResponseManager(
     @Transactional
     fun createTestResponse(createTestResponseRequest: CreateTestResponseRequest): CreateTestResponseResponse {
         //유저 엔티티 생성
-        val createdUser = User(createTestResponseRequest.createUserRequest.name)
+        val user = User(createTestResponseRequest.createUserRequest.name)
 
         //테스트 응답 상세정보 엔티티 생성
         val questionAnswerPairs = createTestResponseRequest
             .createTestResponseDetailRequests.map { it.questionNumber to it.answerNumber }
         val answers = answerService
             .getAnswersByQuestionAnswerPairsByTestVersion(questionAnswerPairs, 1)
-        val createdTestResponseDetails: MutableList<TestResponseDetail> = answers.map{answer ->
+        val testResponseDetails: MutableList<TestResponseDetail> = answers.map{answer ->
             TestResponseDetail(answer)
         } as MutableList<TestResponseDetail>
 
@@ -39,7 +39,10 @@ class TestResponseManager(
 
         //추천 취미 엔티티 생성
         val recommendationHobbies = hobbies.map { hobby ->
-            RecommendationHobby(hobby)
+            val ranking = createRecommendationResultResponse.hobbies.find { h ->
+                h["name"]!! == hobby.name
+            }?.get("ranking") as Int
+            RecommendationHobby(hobby, ranking)
         } as MutableList<RecommendationHobby>
 
         //추천받은 취미 유형 찾기
@@ -49,12 +52,12 @@ class TestResponseManager(
 
         //추천 엔티티 생성
         val mbtiScore = createRecommendationResultResponse.hobbyType["scores"] as List<Map<String, Int>>
-        val createdRecommendation = Recommendation(hobbyType, mbtiScore, recommendationHobbies)
+        val recommendation = Recommendation(hobbyType, mbtiScore, recommendationHobbies)
 
         // 테스트 응답 엔티티 생성
-        val testResponse = TestResponse(createdUser, createdRecommendation, createdTestResponseDetails)
-        val createTestResponse = testResponseService.createTestResponse(testResponse)
+        val testResponse = testResponseService
+            .createTestResponse(TestResponse(user, testResponseDetails, recommendation))
 
-        return CreateTestResponseResponse(createTestResponse)
+        return CreateTestResponseResponse(testResponse)
     }
 }

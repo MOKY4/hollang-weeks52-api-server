@@ -21,4 +21,9 @@ class RecommendationRepositoryImpl(private val recommendationJpaRepository: Reco
         return recommendationJpaRepository.findByIdWithUserAndHobbyTypeAndHobbies(recommendationId)
             ?: throw EntityNotFoundException("추천 $recommendationId 번을 찾을 수 없습니다")
     }
+
+    override fun findByIdWithHobbies(recommendationId: Long): Recommendation {
+        return recommendationJpaRepository.findByIdWithRecommendationHobbiesAndHobbies(recommendationId)
+            ?: throw EntityNotFoundException("추천 $recommendationId 번을 찾을 수 없습니다")
+    }
 }

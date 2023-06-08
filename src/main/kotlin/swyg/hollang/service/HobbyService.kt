@@ -12,9 +12,9 @@ import swyg.hollang.repository.hobby.HobbyRepository
 @Transactional(readOnly = true)
 class HobbyService(private val hobbyRepository: HobbyRepository) {
 
-    fun addHobbiesRecommendCount(hobbies: MutableList<MutableMap<String, String>>): List<Hobby> {
+    fun addHobbiesRecommendCount(hobbies: MutableList<MutableMap<String, Any>>): List<Hobby> {
         val names = hobbies.map {
-            val name = it["name"] ?: ""
+            val name = (it["name"] ?: "").toString()
             name.trim()
             name
         }
