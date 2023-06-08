@@ -100,9 +100,9 @@ class InitService {
             val mbtiType = row.getCell(2).stringCellValue
             val imageUrl = "${IMG_URL}/images/hobby_type/${mbtiType}.png"
             val fitHobbyTypes = mutableListOf(
-                row.getCell(3).stringCellValue,
-                row.getCell(4).stringCellValue,
-                row.getCell(5).stringCellValue
+                FitHobbyType(row.getCell(3).stringCellValue, 1),
+                FitHobbyType(row.getCell(4).stringCellValue, 2),
+                FitHobbyType(row.getCell(5).stringCellValue, 3),
             )
             val hobbyType = HobbyType(
                 name,

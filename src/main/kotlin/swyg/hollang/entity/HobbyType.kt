@@ -25,7 +25,7 @@ class HobbyType(
         name="fit_hobby_type",
         joinColumns = [JoinColumn(name = "hobby_type_id")]
     )
-    val fitHobbyTypes: MutableList<String> = mutableListOf()
+    val fitHobbyTypes: MutableList<FitHobbyType> = mutableListOf()
 
 ) : BaseTimeEntity() {
 

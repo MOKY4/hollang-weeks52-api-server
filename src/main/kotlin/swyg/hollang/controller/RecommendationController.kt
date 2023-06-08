@@ -5,8 +5,8 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import swyg.hollang.dto.CreateRecommendationSurveyRequest
-import swyg.hollang.dto.RecommendHobbyAndTypesResponse
-import swyg.hollang.dto.RecommendShareResponse
+import swyg.hollang.dto.RecommendationResponse
+import swyg.hollang.dto.RecommendationShareResponse
 import swyg.hollang.dto.common.SuccessResponse
 import swyg.hollang.manager.RecommendationManager
 import swyg.hollang.utils.WebProperties
@@ -18,7 +18,7 @@ class RecommendationController(private val recommendationManager: Recommendation
 
     @GetMapping("/{recommendationId}")
     fun recommendHobbyAndTypes(@PathVariable("recommendationId") recommendationId: Long)
-        : ResponseEntity<SuccessResponse<RecommendHobbyAndTypesResponse>> {
+        : ResponseEntity<SuccessResponse<RecommendationResponse>> {
         val recommendHobbyAndTypesResponse = recommendationManager.getUserRecommendation(recommendationId)
         return ResponseEntity.ok()
             .body(SuccessResponse(
@@ -30,7 +30,7 @@ class RecommendationController(private val recommendationManager: Recommendation
 
     @GetMapping("/{recommendationId}/shares")
     fun getRecommendationShare(@PathVariable("recommendationId") recommendationId: Long)
-            : ResponseEntity<SuccessResponse<RecommendShareResponse>> {
+            : ResponseEntity<SuccessResponse<RecommendationShareResponse>> {
         val recommendShareResponse = recommendationManager.getUserRecommendationWithoutFitHobbies(recommendationId)
         return ResponseEntity.ok()
             .body(SuccessResponse(

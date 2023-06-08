@@ -4,8 +4,8 @@ import jakarta.persistence.EntityNotFoundException
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import swyg.hollang.dto.CreateRecommendationSurveyRequest
-import swyg.hollang.dto.RecommendHobbyAndTypesResponse
-import swyg.hollang.dto.RecommendShareResponse
+import swyg.hollang.dto.RecommendationResponse
+import swyg.hollang.dto.RecommendationShareResponse
 import swyg.hollang.entity.Survey
 import swyg.hollang.service.HobbyTypeService
 import swyg.hollang.service.RecommendationService
@@ -17,7 +17,7 @@ class RecommendationManager(
 ) {
 
     @Transactional(readOnly = true)
-    fun getUserRecommendation(recommendationId: Long) : RecommendHobbyAndTypesResponse {
+    fun getUserRecommendation(recommendationId: Long) : RecommendationResponse {
         //추천 id로 추천 결과를 가져온다.
         val findRecommendation = recommendationService
             .getWithUserAndHobbyTypeAndHobbiesAndSurveyById(recommendationId = recommendationId)
@@ -25,21 +25,24 @@ class RecommendationManager(
         val hobbyType = findRecommendation.hobbyType
 
         //추천받은 취미 유형과 잘맞는 유형을 가져온다.
+        val fitMbtiTypes = hobbyType.fitHobbyTypes.map { fitHobbyType ->
+            fitHobbyType.mbtiType
+        }
         val fitHobbyTypes = hobbyTypeService
-            .getHobbyTypesByMbtiTypes(mbtiTypes = hobbyType.fitHobbyTypes)
+            .getHobbyTypesByMbtiTypes(mbtiTypes = fitMbtiTypes)
 
-        return RecommendHobbyAndTypesResponse(
-            findRecommendation, fitHobbyTypes
+        return RecommendationResponse(
+            findRecommendation, fitHobbyTypes, hobbyType.fitHobbyTypes
         )
 
     }
 
     @Transactional(readOnly = true)
-    fun getUserRecommendationWithoutFitHobbies(recommendationId: Long) : RecommendShareResponse {
+    fun getUserRecommendationWithoutFitHobbies(recommendationId: Long) : RecommendationShareResponse {
         val findRecommendation =
             recommendationService.getWithUserAndHobbyTypeAndHobbiesById(recommendationId = recommendationId)
 
-        return RecommendShareResponse(findRecommendation)
+        return RecommendationShareResponse(findRecommendation)
     }
 
     @Transactional
