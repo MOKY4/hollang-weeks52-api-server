@@ -25,15 +25,15 @@ class TestResponseManager(
     @Transactional
     fun createTestResponse(createTestResponseRequest: CreateTestResponseRequest): CreateTestResponseResponse {
         //유저 엔티티 생성
-        val user = User(name = createTestResponseRequest.createUserRequest.name)
+        val user = User(name = createTestResponseRequest.user.name)
 
         //테스트 응답 상세정보 엔티티 생성
         val testResponseDetails: MutableList<TestResponseDetail> = createTestResponseDetails(
-            createTestResponseDetailRequests = createTestResponseRequest.createTestResponseDetailRequests)
+            createTestResponseDetailRequests = createTestResponseRequest.testResponseDetails)
 
         //추론 서버에 추론 요청
         val getInferringResultResponse = inferringService.inferByQuestionAnswerPairs(
-                createTestResponseDetailRequests = createTestResponseRequest.createTestResponseDetailRequests)
+                createTestResponseDetailRequests = createTestResponseRequest.testResponseDetails)
 
         //추론한 취미들의 추천수 카운트 증가
         val hobbyNames = extractHobbyNames(hobbies = getInferringResultResponse.hobbies)

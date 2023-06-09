@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import swyg.hollang.dto.GetHobbiesRankResponse
 import swyg.hollang.dto.common.SuccessResponse
-import swyg.hollang.service.HobbyService
+import swyg.hollang.service.hobby.HobbyService
 import swyg.hollang.utils.WebProperties
 
 @RestController
@@ -23,7 +23,7 @@ class HobbyController(
                        @RequestParam(name = "sort", defaultValue = "recommendCount") sort: String)
         : ResponseEntity<SuccessResponse<GetHobbiesRankResponse>>{
         val pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sort))
-        val hobbies = hobbyService.getHobbies(pageRequest)
+        val hobbies = hobbyService.getAll(pageRequest)
 
         return ResponseEntity.ok()
             .body(

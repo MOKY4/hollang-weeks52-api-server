@@ -1,6 +1,5 @@
 package swyg.hollang.dto
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import jakarta.validation.Valid
 import jakarta.validation.constraints.Max
 import jakarta.validation.constraints.Min
@@ -9,13 +8,11 @@ import jakarta.validation.constraints.Size
 
 data class CreateTestResponseRequest(
     @field:Valid
-    @JsonProperty("user")
-    val createUserRequest: CreateUserRequest,
+    val user: CreateUserRequest,
     @field:Valid
     @field:NotEmpty(message = "테스트 응답 상세정보를 입력해주세요.")
     @field:Size(min = 12, max = 12, message = "12개의 질문에 모두 답해주세요.")
-    @JsonProperty("testResponseDetail")
-    val createTestResponseDetailRequests: List<CreateTestResponseDetailRequest>)
+    val testResponseDetails: List<CreateTestResponseDetailRequest>)
 
 data class CreateUserRequest(
     @field:Size(min = 1, max = 3, message = "사용자 이름은 최소 1글자 최대 3글자까지 가능합니다.")
