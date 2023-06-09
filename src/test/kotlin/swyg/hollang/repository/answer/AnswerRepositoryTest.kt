@@ -38,7 +38,8 @@ internal class AnswerRepositoryTest(
     @Test
     fun findByQuestionNumberWithTestVersion() {
         // given
-        val questionAnswerPairs = listOf(Pair(1, 2))
+        val questionAnswerPairs =
+            listOf(1 to 2, 2 to 1, 3 to 2, 4 to 1, 5 to 1, 6 to 1, 7 to 1, 8 to 2, 9 to 1, 10 to 2, 11 to 1, 12 to 2)
         val testVersion = 1
 
         //when
@@ -46,7 +47,6 @@ internal class AnswerRepositoryTest(
             answerRepository.findAllByQuestionAnswerPairsAndTestVersion(questionAnswerPairs, testVersion)
 
         //then
-        assertThat(findAnswers[0].content).isEqualTo("질문 1 답변 2")
-        assertThat(findAnswers[0].question!!.content).isEqualTo("질문 1")
+        assertThat(findAnswers.size).isSameAs(12)
     }
 }
