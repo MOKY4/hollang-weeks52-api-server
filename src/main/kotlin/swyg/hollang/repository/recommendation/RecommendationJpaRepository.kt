@@ -13,6 +13,7 @@ interface RecommendationJpaRepository: JpaRepository<Recommendation, Long> {
         attributePaths = [
             "user",
             "hobbyType",
+            "hobbyType.fitHobbyTypes",
             "recommendationHobbies",
             "recommendationHobbies.hobby",
             "recommendationHobbies.survey"

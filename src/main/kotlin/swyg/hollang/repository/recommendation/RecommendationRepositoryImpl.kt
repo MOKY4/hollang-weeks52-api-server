@@ -8,10 +8,6 @@ import swyg.hollang.entity.Recommendation
 class RecommendationRepositoryImpl(private val recommendationJpaRepository: RecommendationJpaRepository)
     : RecommendationRepository {
 
-    override fun save(recommendation: Recommendation): Recommendation {
-        return recommendationJpaRepository.save(recommendation)
-    }
-
     override fun findByIdWithUserAndHobbyTypeAndHobbiesAndSurvey(recommendationId: Long): Recommendation {
         return recommendationJpaRepository.findByIdWithUserAndHobbyTypeAndHobbiesAndSurvey(recommendationId)
             ?: throw EntityNotFoundException("추천 $recommendationId 번을 찾을 수 없습니다")

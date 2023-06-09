@@ -6,12 +6,12 @@ import swyg.hollang.entity.Hobby
 
 interface HobbyRepository {
 
-    fun findByName(name: String): Hobby
+    fun save(hobby: Hobby): Hobby
 
     fun findByNameIsIn(names: List<String>): List<Hobby>
 
     fun findAll(pageable: Pageable): Page<Hobby>
 
-    fun updateRecommendCountByNames(name: List<String>): Int
+    fun incrementRecommendCountByNames(names: List<String>): Int
 
 }

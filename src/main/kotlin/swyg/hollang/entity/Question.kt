@@ -10,7 +10,7 @@ import swyg.hollang.entity.common.BaseTimeEntity
 class Question private constructor(
 
     @Column(name = "question_number", unique = true, nullable = false, updatable = false)
-    val number: Long,
+    val number: Int,
 
     @Column(name = "content", nullable = false)
     val content: String
@@ -29,7 +29,7 @@ class Question private constructor(
     @BatchSize(size = 100)
     var answers: MutableSet<Answer> = mutableSetOf()
 
-    constructor(number: Long, content: String, answers: MutableSet<Answer>) : this(number, content) {
+    constructor(number: Int, content: String, answers: MutableSet<Answer>) : this(number, content) {
         this.answers.addAll(answers)
         answers.forEach { answer ->
             answer.question = answer.question ?: this
