@@ -62,7 +62,7 @@ internal class HobbyRepositoryTest(@Autowired val hobbyRepository: HobbyReposito
 
     @Test
     @DisplayName("취미 이름들로 취미들의 추천수를 1씩 증가")
-    fun updateRecommendCountByNames() {
+    fun incrementRecommendCountByNameIsIn() {
         // given
         val hobby1 = Hobby("취미1", "취미 요약정보", "취미 상세정보", "https://example.com")
         hobby1.recommendCount = 3
@@ -76,7 +76,7 @@ internal class HobbyRepositoryTest(@Autowired val hobbyRepository: HobbyReposito
 
         // when
         val hobbyNames = listOf("취미1", "취미2", "취미3")
-        val updatedHobbyCount = hobbyRepository.incrementRecommendCountByNames(names = hobbyNames)
+        val updatedHobbyCount = hobbyRepository.incrementRecommendCountByNameIsIn(names = hobbyNames)
 
         // then
         assertThat(updatedHobbyCount).isSameAs(3)

@@ -12,6 +12,6 @@ interface HobbyRepository {
 
     fun findAll(pageable: Pageable): Page<Hobby>
 
-    fun incrementRecommendCountByNames(names: List<String>): Int
+    fun incrementRecommendCountByNameIsIn(names: List<String>): Int
 
 }

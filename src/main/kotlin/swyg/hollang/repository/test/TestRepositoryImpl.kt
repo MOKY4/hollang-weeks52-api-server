@@ -11,8 +11,8 @@ class TestRepositoryImpl(private val testJpaRepository: TestJpaRepository) : Tes
         return testJpaRepository.save(test)
     }
 
-    override fun findByVersionWithQuestions(version: Int): Test {
-        return testJpaRepository.findByVersionWithQuestions(version)
+    override fun findWithQuestionsAndAnswersByVersion(version: Int): Test {
+        return testJpaRepository.findWithQuestionsAndAnswersByVersion(version)
             ?: throw EntityNotFoundException("테스트가 존재하지 않습니다")
     }
 

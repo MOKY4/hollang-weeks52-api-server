@@ -40,7 +40,7 @@ internal class TestRepositoryTest(@Autowired val testRepository: TestRepository)
     }
 
     @Test
-    fun findByVersionWithQuestions() {
+    fun findWithQuestionsAndAnswersByVersion() {
         // given
         val questions: MutableSet<Question> = mutableSetOf()
         for(i in 1..12){
@@ -57,7 +57,7 @@ internal class TestRepositoryTest(@Autowired val testRepository: TestRepository)
         testRepository.save(test)
 
         // when
-        val findTest = testRepository.findByVersionWithQuestions(1)
+        val findTest = testRepository.findWithQuestionsAndAnswersByVersion(1)
 
         // then
         assertThat(findTest.questions.size).isSameAs(12)

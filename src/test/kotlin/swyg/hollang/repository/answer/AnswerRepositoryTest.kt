@@ -36,7 +36,7 @@ internal class AnswerRepositoryTest(
     }
 
     @Test
-    fun findByQuestionNumberWithTestVersion() {
+    fun findAllByQuestionAnswerPairsAndTestVersion() {
         // given
         val questionAnswerPairs =
             listOf(1 to 2, 2 to 1, 3 to 2, 4 to 1, 5 to 1, 6 to 1, 7 to 1, 8 to 2, 9 to 1, 10 to 2, 11 to 1, 12 to 2)

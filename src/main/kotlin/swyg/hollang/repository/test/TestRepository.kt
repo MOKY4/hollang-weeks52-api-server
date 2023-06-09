@@ -6,6 +6,6 @@ interface TestRepository {
 
     fun save(test: Test): Test
 
-    fun findByVersionWithQuestions(version: Int): Test
+    fun findWithQuestionsAndAnswersByVersion(version: Int): Test
 
 }

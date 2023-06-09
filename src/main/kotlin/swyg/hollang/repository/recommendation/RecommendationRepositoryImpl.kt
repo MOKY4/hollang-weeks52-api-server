@@ -8,18 +8,18 @@ import swyg.hollang.entity.Recommendation
 class RecommendationRepositoryImpl(private val recommendationJpaRepository: RecommendationJpaRepository)
     : RecommendationRepository {
 
-    override fun findByIdWithUserAndHobbyTypeAndHobbiesAndSurvey(recommendationId: Long): Recommendation {
-        return recommendationJpaRepository.findByIdWithUserAndHobbyTypeAndHobbiesAndSurvey(recommendationId)
+    override fun findWithUserAndHobbyTypeAndHobbiesAndSurveyById(recommendationId: Long): Recommendation {
+        return recommendationJpaRepository.findWithUserAndHobbyTypeAndHobbiesAndSurveyById(recommendationId)
             ?: throw EntityNotFoundException("추천 $recommendationId 번을 찾을 수 없습니다")
     }
 
-    override fun findByIdWithUserAndHobbyTypeAndHobbies(recommendationId: Long): Recommendation {
-        return recommendationJpaRepository.findByIdWithUserAndHobbyTypeAndHobbies(recommendationId)
+    override fun findWithUserAndHobbyTypeAndHobbiesById(recommendationId: Long): Recommendation {
+        return recommendationJpaRepository.findWithUserAndHobbyTypeAndHobbiesById(recommendationId)
             ?: throw EntityNotFoundException("추천 $recommendationId 번을 찾을 수 없습니다")
     }
 
-    override fun findByIdWithHobbies(recommendationId: Long): Recommendation {
-        return recommendationJpaRepository.findByIdWithRecommendationHobbiesAndHobbies(recommendationId)
+    override fun findWithHobbiesById(recommendationId: Long): Recommendation {
+        return recommendationJpaRepository.findWithRecommendationHobbiesAndHobbiesById(recommendationId)
             ?: throw EntityNotFoundException("추천 $recommendationId 번을 찾을 수 없습니다")
     }
 }

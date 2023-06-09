@@ -20,7 +20,7 @@ class HobbyRepositoryImpl(private val hobbyJpaRepository: HobbyJpaRepository): H
         return hobbyJpaRepository.findAll(pageable)
     }
 
-    override fun incrementRecommendCountByNames(names: List<String>): Int {
-        return hobbyJpaRepository.incrementRecommendCountByNames(names)
+    override fun incrementRecommendCountByNameIsIn(names: List<String>): Int {
+        return hobbyJpaRepository.incrementRecommendCountByNameIsIn(names)
     }
 }

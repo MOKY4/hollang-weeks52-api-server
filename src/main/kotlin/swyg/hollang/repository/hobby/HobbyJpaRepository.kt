@@ -11,5 +11,5 @@ interface HobbyJpaRepository: JpaRepository<Hobby, Long> {
 
     @Modifying
     @Query("update Hobby h set h.recommendCount = h.recommendCount + 1 where h.name in :names")
-    fun incrementRecommendCountByNames(names: List<String>): Int
+    fun incrementRecommendCountByNameIsIn(names: List<String>): Int
 }

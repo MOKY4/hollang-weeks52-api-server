@@ -44,13 +44,13 @@ internal class RecommendationRepositoryTest(
     }
 
     @Test
-    fun findByIdWithUserAndHobbyTypeAndHobbiesAndSurvey() {
+    fun findWithUserAndHobbyTypeAndHobbiesAndSurveyById() {
         // given
         val (recommendation, savedTestResponse) = createTestResponse()
 
         // when
         val findRecommendation = recommendationRepository
-                .findByIdWithUserAndHobbyTypeAndHobbiesAndSurvey(savedTestResponse.recommendation?.id!!)
+                .findWithUserAndHobbyTypeAndHobbiesAndSurveyById(savedTestResponse.recommendation?.id!!)
 
         // then
         assertThat(findRecommendation.recommendationHobbies[0].hobby)
@@ -58,13 +58,13 @@ internal class RecommendationRepositoryTest(
     }
 
     @Test
-    fun findByIdWithUserAndHobbyTypeAndHobbies() {
+    fun findWithUserAndHobbyTypeAndHobbiesById() {
         // given
         val (recommendation, savedTestResponse) = createTestResponse()
 
         // when
         val findRecommendation = recommendationRepository
-                .findByIdWithUserAndHobbyTypeAndHobbies(savedTestResponse.recommendation?.id!!)
+                .findWithUserAndHobbyTypeAndHobbiesById(savedTestResponse.recommendation?.id!!)
 
         // then
         assertThat(findRecommendation.recommendationHobbies[0].hobby)
@@ -72,13 +72,13 @@ internal class RecommendationRepositoryTest(
     }
 
     @Test
-    fun findByIdWithHobbies() {
+    fun findWithHobbiesById() {
         // given
         val (recommendation, savedTestResponse) = createTestResponse()
 
         // when
         val findRecommendation = recommendationRepository
-            .findByIdWithHobbies(savedTestResponse.recommendation?.id!!)
+            .findWithHobbiesById(savedTestResponse.recommendation?.id!!)
 
         // then
         assertThat(findRecommendation.recommendationHobbies[0].hobby)
