@@ -1,7 +1,7 @@
 package swyg.hollang.entity
 
 import jakarta.persistence.*
-import jakarta.persistence.FetchType.*
+import jakarta.persistence.FetchType.LAZY
 import swyg.hollang.entity.common.BaseTimeEntity
 
 @Entity
@@ -25,7 +25,7 @@ class HobbyType(
         name="fit_hobby_type",
         joinColumns = [JoinColumn(name = "hobby_type_id")]
     )
-    val fitHobbyTypes: MutableList<FitHobbyType> = mutableListOf()
+    val fitHobbyTypes: MutableSet<FitHobbyType> = mutableSetOf()
 
 ) : BaseTimeEntity() {
 

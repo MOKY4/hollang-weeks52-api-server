@@ -10,6 +10,7 @@ import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import swyg.hollang.entity.*
+import swyg.hollang.repository.test.TestJpaRepository
 import java.io.InputStream
 
 @Component
@@ -27,7 +28,9 @@ class InitDb(private val initService: InitService) {
 @Component
 @Transactional
 @Profile(value = ["local"])
-class InitService {
+class InitService(
+    val testJpaRepository: TestJpaRepository
+) {
 
     @PersistenceContext
     private lateinit var em: EntityManager
@@ -42,9 +45,8 @@ class InitService {
         return WorkbookFactory.create(inputStream)
     }
 
-    fun initTestData(testVersion: Long) {
+    fun initTestData(testVersion: Int) {
         val workbook = initFile()
-
         val sheet = workbook.getSheet("test")
 
         val questions: MutableSet<Question> = mutableSetOf()
@@ -52,21 +54,20 @@ class InitService {
             val row = sheet.getRow(rowIndex)
             if(row.getCell(0) == null) break
 
-            val number = rowIndex.toLong()
-            val content = row.getCell(0).stringCellValue
             val answers: MutableSet<Answer> = mutableSetOf()
             for (cellIndex in row.firstCellNum + 1..row.firstCellNum + 2) {
                 val cell = row.getCell(cellIndex)
                 val cellValue = cell?.stringCellValue ?: ""
-                val answer = Answer(cellIndex.toLong(), cellValue)
+                val answer = Answer(cellIndex, cellValue)
                 answers.add(answer)
             }
-            val question = Question(number, content, answers)
+
+            val content = row.getCell(0).stringCellValue
+            val question = Question(rowIndex, content, answers)
             questions.add(question)
         }
         //cascade type을 all로 해놨으니 영속성이 전이돼서 부모 엔티티를 영속화시키면 자식 엔티티도 영속화된다.
-        val test = Test(testVersion, questions)
-        em.persist(test)
+        testJpaRepository.save(Test(testVersion, questions))
     }
 
     fun initHobbyData() {
@@ -99,7 +100,7 @@ class InitService {
             val description = row.getCell(1).stringCellValue
             val mbtiType = row.getCell(2).stringCellValue
             val imageUrl = "${IMG_URL}/images/hobby_type/${mbtiType}.png"
-            val fitHobbyTypes = mutableListOf(
+            val fitHobbyTypes = mutableSetOf(
                 FitHobbyType(row.getCell(3).stringCellValue, 1),
                 FitHobbyType(row.getCell(4).stringCellValue, 2),
                 FitHobbyType(row.getCell(5).stringCellValue, 3),

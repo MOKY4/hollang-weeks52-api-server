@@ -9,6 +9,7 @@ import swyg.hollang.dto.CreateTestResponseRequest
 import swyg.hollang.dto.common.SuccessResponse
 import swyg.hollang.manager.TestResponseManager
 import swyg.hollang.service.*
+import swyg.hollang.service.testresponse.TestResponseService
 import swyg.hollang.utils.WebProperties
 
 @RestController
@@ -32,7 +33,7 @@ class TestResponseController(
 
     @GetMapping("/count")
     fun countAllTestResponse(): ResponseEntity<SuccessResponse<CountAllTestResponseResponse>> {
-        val numberOfTestResponse = testResponseService.countAllTestResponse()
+        val numberOfTestResponse = testResponseService.countAll()
         return ResponseEntity.ok()
             .body(SuccessResponse(
                 HttpStatus.OK.name,

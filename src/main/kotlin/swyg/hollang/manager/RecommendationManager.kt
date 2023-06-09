@@ -4,11 +4,11 @@ import jakarta.persistence.EntityNotFoundException
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import swyg.hollang.dto.CreateRecommendationSurveyRequest
-import swyg.hollang.dto.RecommendationResponse
-import swyg.hollang.dto.RecommendationShareResponse
+import swyg.hollang.dto.GetRecommendationResponse
+import swyg.hollang.dto.GetRecommendationShareResponse
 import swyg.hollang.entity.Survey
-import swyg.hollang.service.HobbyTypeService
-import swyg.hollang.service.RecommendationService
+import swyg.hollang.service.hobbytype.HobbyTypeService
+import swyg.hollang.service.recommendation.RecommendationService
 
 @Component
 class RecommendationManager(
@@ -17,7 +17,7 @@ class RecommendationManager(
 ) {
 
     @Transactional(readOnly = true)
-    fun getUserRecommendation(recommendationId: Long) : RecommendationResponse {
+    fun getRecommendationById(recommendationId: Long) : GetRecommendationResponse {
         //추천 id로 추천 결과를 가져온다.
         val findRecommendation = recommendationService
             .getWithUserAndHobbyTypeAndHobbiesAndSurveyById(recommendationId = recommendationId)
@@ -29,20 +29,20 @@ class RecommendationManager(
             fitHobbyType.mbtiType
         }
         val fitHobbyTypes = hobbyTypeService
-            .getHobbyTypesByMbtiTypes(mbtiTypes = fitMbtiTypes)
+            .getAllByMbtiTypeIsIn(mbtiTypes = fitMbtiTypes)
 
-        return RecommendationResponse(
-            findRecommendation, fitHobbyTypes, hobbyType.fitHobbyTypes
+        return GetRecommendationResponse(
+            findRecommendation, fitHobbyTypes, hobbyType.fitHobbyTypes.toList()
         )
 
     }
 
     @Transactional(readOnly = true)
-    fun getUserRecommendationWithoutFitHobbies(recommendationId: Long) : RecommendationShareResponse {
+    fun getRecommendationWithoutFitHobbiesById(recommendationId: Long) : GetRecommendationShareResponse {
         val findRecommendation =
             recommendationService.getWithUserAndHobbyTypeAndHobbiesById(recommendationId = recommendationId)
 
-        return RecommendationShareResponse(findRecommendation)
+        return GetRecommendationShareResponse(findRecommendation)
     }
 
     @Transactional

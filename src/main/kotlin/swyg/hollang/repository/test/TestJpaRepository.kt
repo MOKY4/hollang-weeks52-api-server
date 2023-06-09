@@ -10,5 +10,5 @@ interface TestJpaRepository: JpaRepository<Test, Long> {
             "join fetch t.questions q " +
             "join fetch q.answers a " +
             "where t.version = :version")
-    fun findByVersionWithQuestions(version: Long): Test?
+    fun findWithQuestionsAndAnswersByVersion(version: Int): Test?
 }

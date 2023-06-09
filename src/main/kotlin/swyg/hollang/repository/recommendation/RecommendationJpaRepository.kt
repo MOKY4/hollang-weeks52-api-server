@@ -13,12 +13,13 @@ interface RecommendationJpaRepository: JpaRepository<Recommendation, Long> {
         attributePaths = [
             "user",
             "hobbyType",
+            "hobbyType.fitHobbyTypes",
             "recommendationHobbies",
             "recommendationHobbies.hobby",
             "recommendationHobbies.survey"
         ]
     )
-    fun findByIdWithUserAndHobbyTypeAndHobbiesAndSurvey(recommendationId: Long): Recommendation?
+    fun findWithUserAndHobbyTypeAndHobbiesAndSurveyById(recommendationId: Long): Recommendation?
 
     @Query("select distinct r from Recommendation r " +
             "where r.id = :recommendationId")
@@ -30,7 +31,7 @@ interface RecommendationJpaRepository: JpaRepository<Recommendation, Long> {
             "recommendationHobbies.hobby"
         ]
     )
-    fun findByIdWithUserAndHobbyTypeAndHobbies(recommendationId: Long): Recommendation?
+    fun findWithUserAndHobbyTypeAndHobbiesById(recommendationId: Long): Recommendation?
 
     @Query("select distinct r from Recommendation r " +
             "where r.id = :recommendationId")
@@ -40,5 +41,5 @@ interface RecommendationJpaRepository: JpaRepository<Recommendation, Long> {
             "recommendationHobbies.hobby"
         ]
     )
-    fun findByIdWithRecommendationHobbiesAndHobbies(recommendationId: Long): Recommendation?
+    fun findWithRecommendationHobbiesAndHobbiesById(recommendationId: Long): Recommendation?
 }

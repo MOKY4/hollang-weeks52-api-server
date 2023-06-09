@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.transaction.annotation.Transactional
 import swyg.hollang.entity.Hobby
@@ -19,8 +19,8 @@ import swyg.hollang.entity.Hobby
 @AutoConfigureMockMvc
 @ActiveProfiles(value = ["test"])
 class HobbyControllerTest(
-    @Autowired private val em: EntityManager,
-    @Autowired private val mockMvc: MockMvc
+    @Autowired val em: EntityManager,
+    @Autowired val mockMvc: MockMvc
 ) {
 
     @BeforeEach
@@ -40,18 +40,47 @@ class HobbyControllerTest(
 
     @Test
     fun getHobbiesRank(){
-        //given
+        // given
         val page = 0
         val size = 20
         val sort = "recommendCount"
 
-        //then
-        mockMvc.perform(
-            MockMvcRequestBuilders.get("/hobbies")
+        /**
+         * when
+         */
+
+        // 쿼리 파라미터를 넣었을 때
+        val hasQueryParameter = mockMvc.perform(get("/hobbies")
                 .queryParam("page", page.toString())
                 .queryParam("size", size.toString())
                 .queryParam("sort", sort))
             .andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_VALUE))
+
+        // 쿼리 파라미터를 넣지 않았을 때
+        val noQueryParameter = mockMvc.perform(get("/hobbies"))
+            .andExpect(MockMvcResultMatchers.status().isOk)
+            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_VALUE))
+
+        /**
+         * then
+         */
+
+        // 쿼리 파라미터를 넣었을 때
+        hasQueryParameter
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data.hobbies.length()", 20).exists())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data.hobbies[0].id").exists())
+            .andExpect(MockMvcResultMatchers.jsonPath("\$.data.hobbies[0].name").exists())
+            .andExpect(MockMvcResultMatchers.jsonPath("\$.data.hobbies[0].recommendCount").exists())
+            .andExpect(MockMvcResultMatchers.jsonPath("\$.data.hobbies[0].imageUrl").exists())
+
+
+        // 쿼리 파라미터를 안넣었을 때
+        noQueryParameter
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data.hobbies.length()", 20).exists())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data.hobbies[0].id").exists())
+            .andExpect(MockMvcResultMatchers.jsonPath("\$.data.hobbies[0].name").exists())
+            .andExpect(MockMvcResultMatchers.jsonPath("\$.data.hobbies[0].recommendCount").exists())
+            .andExpect(MockMvcResultMatchers.jsonPath("\$.data.hobbies[0].imageUrl").exists())
     }
 }
