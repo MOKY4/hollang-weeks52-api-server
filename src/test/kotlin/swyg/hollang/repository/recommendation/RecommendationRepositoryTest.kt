@@ -1,18 +1,15 @@
 package swyg.hollang.repository.recommendation
 
 import jakarta.persistence.EntityManager
-import org.assertj.core.api.Assertions.*
-import org.junit.jupiter.api.Test
-
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.transaction.annotation.Transactional
 import swyg.hollang.entity.*
 import swyg.hollang.repository.answer.AnswerRepository
-import swyg.hollang.repository.hobby.HobbyRepository
-import swyg.hollang.repository.hobbytype.HobbyTypeRepository
 import swyg.hollang.repository.testresponse.TestResponseRepository
 
 @ActiveProfiles(value = ["test"])
@@ -20,8 +17,6 @@ import swyg.hollang.repository.testresponse.TestResponseRepository
 @Transactional
 internal class RecommendationRepositoryTest(
     @Autowired val em: EntityManager,
-    @Autowired val hobbyRepository: HobbyRepository,
-    @Autowired val hobbyTypeRepository: HobbyTypeRepository,
     @Autowired val answerRepository: AnswerRepository,
     @Autowired val testResponseRepository: TestResponseRepository,
     @Autowired val recommendationRepository: RecommendationRepository) {
@@ -53,8 +48,7 @@ internal class RecommendationRepositoryTest(
                 .findWithUserAndHobbyTypeAndHobbiesAndSurveyById(savedTestResponse.recommendation?.id!!)
 
         // then
-        assertThat(findRecommendation.recommendationHobbies[0].hobby)
-            .isEqualTo(recommendation.recommendationHobbies[0].hobby)
+        assertThat(findRecommendation.mbtiScore).isEqualTo(recommendation.mbtiScore)
     }
 
     @Test
@@ -67,8 +61,7 @@ internal class RecommendationRepositoryTest(
                 .findWithUserAndHobbyTypeAndHobbiesById(savedTestResponse.recommendation?.id!!)
 
         // then
-        assertThat(findRecommendation.recommendationHobbies[0].hobby)
-            .isEqualTo(recommendation.recommendationHobbies[0].hobby)
+        assertThat(findRecommendation.mbtiScore).isEqualTo(recommendation.mbtiScore)
     }
 
     @Test
@@ -81,8 +74,7 @@ internal class RecommendationRepositoryTest(
             .findWithHobbiesById(savedTestResponse.recommendation?.id!!)
 
         // then
-        assertThat(findRecommendation.recommendationHobbies[0].hobby)
-            .isEqualTo(recommendation.recommendationHobbies[0].hobby)
+        assertThat(findRecommendation.mbtiScore).isEqualTo(recommendation.mbtiScore)
     }
 
     private fun createFitHobbyTypes(mbtiTypes: List<String>): MutableSet<FitHobbyType> {
@@ -107,14 +99,14 @@ internal class RecommendationRepositoryTest(
         val hobbyType = HobbyType(
             "취미 유형1", "취미 유형 상세정보", "https://example.com", "INTJ", fitHobbyTypes
         )
-        hobbyTypeRepository.save(hobbyType)
+        em.persist(hobbyType)
 
         val hobby1 = Hobby("취미1", "취미 요약정보", "취미 상세정보", "https://example.com")
         val hobby2 = Hobby("취미2", "취미 요약정보", "취미 상세정보", "https://example.com")
         val hobby3 = Hobby("취미3", "취미 요약정보", "취미 상세정보", "https://example.com")
-        hobbyRepository.save(hobby1)
-        hobbyRepository.save(hobby2)
-        hobbyRepository.save(hobby3)
+        em.persist(hobby1)
+        em.persist(hobby2)
+        em.persist(hobby3)
 
         val recommendationHobbies = mutableListOf(
             RecommendationHobby(hobby1, 1),

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import swyg.hollang.entity.Hobby
 import swyg.hollang.entity.Recommendation
 
-data class RecommendationShareResponse(@JsonIgnore val recommendationEntity: Recommendation){
+data class GetRecommendationShareResponse(@JsonIgnore val recommendationEntity: Recommendation){
 
     val recommendation: RecommendationDto = RecommendationDto()
 

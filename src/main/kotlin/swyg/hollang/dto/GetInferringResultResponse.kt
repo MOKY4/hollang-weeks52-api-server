@@ -1,6 +1,6 @@
 package swyg.hollang.dto
 
-data class CreateRecommendationResultResponse(
+data class GetInferringResultResponse(
     val hobbyType: MutableMap<String, Any>,
     val hobbies: MutableList<MutableMap<String, Any>>
 )

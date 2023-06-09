@@ -1,25 +1,40 @@
 package swyg.hollang.repository.testresponse
 
-import org.assertj.core.api.Assertions.*
+import jakarta.persistence.EntityManager
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.transaction.annotation.Transactional
 import swyg.hollang.entity.*
 import swyg.hollang.repository.answer.AnswerRepository
-import swyg.hollang.repository.hobby.HobbyRepository
-import swyg.hollang.repository.hobbytype.HobbyTypeRepository
 
 @ActiveProfiles(value = ["test"])
 @SpringBootTest
 @Transactional
 internal class TestResponseRepositoryTest(
+    @Autowired val em: EntityManager,
     @Autowired val answerRepository: AnswerRepository,
-    @Autowired val hobbyRepository: HobbyRepository,
-    @Autowired val hobbyTypeRepository: HobbyTypeRepository,
     @Autowired val testResponseRepository: TestResponseRepository) {
+
+    @BeforeEach
+    fun beforeEach() {
+        val questions: MutableSet<Question> = mutableSetOf()
+        for(i in 1..12){
+            val answers: MutableSet<Answer> = mutableSetOf()
+            for(j in 1..2){
+                val answer = Answer(j, "질문 $i 답변 $j")
+                answers.add(answer)
+            }
+
+            val question = Question(i,"질문 $i", answers)
+            questions.add(question)
+        }
+        val test = Test(1, questions)
+        em.persist(test)
+    }
 
     @Test
     fun save() {
@@ -70,14 +85,14 @@ internal class TestResponseRepositoryTest(
         val hobbyType = HobbyType(
             "취미 유형1", "취미 유형 상세정보", "https://example.com", "INTJ", fitHobbyTypes
         )
-        hobbyTypeRepository.save(hobbyType)
+        em.persist(hobbyType)
 
         val hobby1 = Hobby("취미1", "취미 요약정보", "취미 상세정보", "https://example.com")
         val hobby2 = Hobby("취미2", "취미 요약정보", "취미 상세정보", "https://example.com")
         val hobby3 = Hobby("취미3", "취미 요약정보", "취미 상세정보", "https://example.com")
-        hobbyRepository.save(hobby1)
-        hobbyRepository.save(hobby2)
-        hobbyRepository.save(hobby3)
+        em.persist(hobby1)
+        em.persist(hobby2)
+        em.persist(hobby3)
 
         val recommendationHobbies = mutableListOf(
             RecommendationHobby(hobby1, 1),

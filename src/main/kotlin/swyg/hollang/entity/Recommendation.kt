@@ -36,7 +36,7 @@ class Recommendation private constructor(
         orphanRemoval = true,
         fetch = LAZY
     )
-    var recommendationHobbies: MutableList<RecommendationHobby> = mutableListOf()
+    val recommendationHobbies: MutableSet<RecommendationHobby> = mutableSetOf()
 
     constructor(hobbyType: HobbyType, mbtiScore: List<Map<String, Int>>, recommendationHobbies: MutableList<RecommendationHobby>)
             : this(hobbyType, mbtiScore) {

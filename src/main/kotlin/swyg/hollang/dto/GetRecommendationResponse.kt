@@ -6,7 +6,7 @@ import swyg.hollang.entity.Hobby
 import swyg.hollang.entity.HobbyType
 import swyg.hollang.entity.Recommendation
 
-data class RecommendationResponse(
+data class GetRecommendationResponse(
     @JsonIgnore val recommendationEntity: Recommendation,
     @JsonIgnore val fitHobbyTypesEntity: List<HobbyType>,
     @JsonIgnore val fitHobbyTypeValues: List<FitHobbyType>){
