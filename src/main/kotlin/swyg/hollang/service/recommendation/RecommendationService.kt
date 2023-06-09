@@ -1,4 +1,4 @@
-package swyg.hollang.service
+package swyg.hollang.service.recommendation
 
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -9,19 +9,15 @@ import swyg.hollang.repository.recommendation.RecommendationRepository
 @Transactional(readOnly = true)
 class RecommendationService(private val recommendationRepository: RecommendationRepository) {
 
-    fun save(recommendation: Recommendation): Recommendation {
-        return recommendationRepository.save(recommendation)
-    }
-
     fun getWithUserAndHobbyTypeAndHobbiesAndSurveyById(recommendationId: Long): Recommendation {
-        return recommendationRepository.findByIdWithUserAndHobbyTypeAndHobbiesAndSurvey(recommendationId)
+        return recommendationRepository.findWithUserAndHobbyTypeAndHobbiesAndSurveyById(recommendationId)
     }
 
     fun getWithUserAndHobbyTypeAndHobbiesById(recommendationId: Long) : Recommendation {
-        return recommendationRepository.findByIdWithUserAndHobbyTypeAndHobbies(recommendationId)
+        return recommendationRepository.findWithUserAndHobbyTypeAndHobbiesById(recommendationId)
     }
 
     fun getWithHobbiesById(recommendationId: Long) : Recommendation {
-        return recommendationRepository.findByIdWithHobbies(recommendationId)
+        return recommendationRepository.findWithHobbiesById(recommendationId)
     }
 }

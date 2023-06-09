@@ -1,4 +1,4 @@
-package swyg.hollang.service
+package swyg.hollang.service.inferring
 
 import org.springframework.stereotype.Service
 import swyg.hollang.dto.CreateRecommendationResultResponse
