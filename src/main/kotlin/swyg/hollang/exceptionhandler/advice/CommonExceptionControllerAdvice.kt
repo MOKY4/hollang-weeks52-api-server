@@ -20,7 +20,7 @@ import swyg.hollang.dto.common.ExceptionResponse
 @Order(1)
 @EnableWebMvc
 @RestControllerAdvice
-class ExceptionControllerAdvice : ResponseEntityExceptionHandler() {
+class CommonExceptionControllerAdvice : ResponseEntityExceptionHandler() {
 
     override fun handleHttpMessageNotReadable(
         ex: HttpMessageNotReadableException,
@@ -39,9 +39,10 @@ class ExceptionControllerAdvice : ResponseEntityExceptionHandler() {
         status: HttpStatusCode,
         request: WebRequest
     ): ResponseEntity<Any>? {
+        val defaultMessage = ex.bindingResult.fieldError?.defaultMessage ?: ex.message
         return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
-            .body(ExceptionResponse(HttpStatus.BAD_REQUEST.name, ex.message))
+            .body(ExceptionResponse(HttpStatus.BAD_REQUEST.name, defaultMessage))
     }
 
     override fun handleMissingServletRequestParameter(

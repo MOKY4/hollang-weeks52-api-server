@@ -1,14 +1,14 @@
 package swyg.hollang.service.inferring
 
 import org.springframework.stereotype.Service
-import swyg.hollang.dto.CreateRecommendationResultResponse
 import swyg.hollang.dto.CreateTestResponseDetailRequest
+import swyg.hollang.dto.GetInferringResultResponse
 
 @Service
-class InferringService(private val recommendationApiClient: RecommendationApiClient) {
+class InferringService(private val inferringApiClient: InferringApiClient) {
 
-    fun inferHobbiesAndType(createTestResponseDetailRequests: MutableList<CreateTestResponseDetailRequest>)
-        : CreateRecommendationResultResponse {
-        return recommendationApiClient.inferHobbiesAndType(createTestResponseDetailRequests)
+    fun inferByQuestionAnswerPairs(createTestResponseDetailRequests: List<CreateTestResponseDetailRequest>)
+        : GetInferringResultResponse {
+        return inferringApiClient.inferHobbyTypeAndHobbies(createTestResponseDetailRequests)
     }
 }
