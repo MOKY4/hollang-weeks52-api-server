@@ -7,7 +7,7 @@ spring:
       on-profile: dev
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${MYSQL_HOST}:3306/${MYSQL_DATABASE}
+    url: jdbc:mysql://${MYSQL_HOST}:3306/${MYSQL_DATABASE}?rewriteBatchedStatements=true
     username: ${MYSQL_ROOT_USERNAME}
     password: ${MYSQL_ROOT_PASSWORD}
   jpa:
