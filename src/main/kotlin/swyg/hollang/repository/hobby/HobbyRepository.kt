@@ -8,10 +8,10 @@ interface HobbyRepository {
 
     fun save(hobby: Hobby): Hobby
 
-    fun findByNameIsIn(names: List<String>): List<Hobby>
+    fun findByOriginalNameIsIn(names: List<String>): List<Hobby>
 
     fun findAll(pageable: Pageable): Page<Hobby>
 
-    fun incrementRecommendCountByNameIsIn(names: List<String>): Int
+    fun incrementRecommendCountByOriginalNameIsIn(names: List<String>): Int
 
 }

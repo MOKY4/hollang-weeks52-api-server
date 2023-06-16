@@ -7,9 +7,9 @@ import swyg.hollang.entity.Hobby
 
 interface HobbyJpaRepository: JpaRepository<Hobby, Long> {
 
-    fun findByNameIsIn(names: List<String>): List<Hobby>
+    fun findByOriginalNameIsIn(names: List<String>): List<Hobby>
 
     @Modifying
-    @Query("update Hobby h set h.recommendCount = h.recommendCount + 1 where h.name in :names")
+    @Query("update Hobby h set h.recommendCount = h.recommendCount + 1 where h.originalName in :names")
     fun incrementRecommendCountByNameIsIn(names: List<String>): Int
 }

@@ -101,9 +101,9 @@ internal class RecommendationRepositoryTest(
         )
         em.persist(hobbyType)
 
-        val hobby1 = Hobby("취미1", "취미 요약정보", "취미 상세정보", "https://example.com")
-        val hobby2 = Hobby("취미2", "취미 요약정보", "취미 상세정보", "https://example.com")
-        val hobby3 = Hobby("취미3", "취미 요약정보", "취미 상세정보", "https://example.com")
+        val hobby1 = Hobby("취미1", "취미1 요약", "취미 요약정보", "취미 상세정보", "https://example.com")
+        val hobby2 = Hobby("취미2", "취미2 요약", "취미 요약정보", "취미 상세정보", "https://example.com")
+        val hobby3 = Hobby("취미3", "취미3 요약", "취미 요약정보", "취미 상세정보", "https://example.com")
         em.persist(hobby1)
         em.persist(hobby2)
         em.persist(hobby3)

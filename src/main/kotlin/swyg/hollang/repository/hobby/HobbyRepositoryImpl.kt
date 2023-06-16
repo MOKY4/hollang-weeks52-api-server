@@ -12,15 +12,15 @@ class HobbyRepositoryImpl(private val hobbyJpaRepository: HobbyJpaRepository): H
         return hobbyJpaRepository.save(hobby)
     }
 
-    override fun findByNameIsIn(names: List<String>): List<Hobby> {
-        return hobbyJpaRepository.findByNameIsIn(names)
+    override fun findByOriginalNameIsIn(names: List<String>): List<Hobby> {
+        return hobbyJpaRepository.findByOriginalNameIsIn(names)
     }
 
     override fun findAll(pageable: Pageable): Page<Hobby> {
         return hobbyJpaRepository.findAll(pageable)
     }
 
-    override fun incrementRecommendCountByNameIsIn(names: List<String>): Int {
+    override fun incrementRecommendCountByOriginalNameIsIn(names: List<String>): Int {
         return hobbyJpaRepository.incrementRecommendCountByNameIsIn(names)
     }
 }

@@ -29,6 +29,7 @@ class HobbyControllerTest(
         for (i in 1..40) {
             val hobby = Hobby(
                 "홀랑 $i",
+                "홀랑 $i 요약",
                 "홀랑 $i 상세정보",
                 "default",
                 "https://example.com/hollang$i.png"
@@ -70,7 +71,7 @@ class HobbyControllerTest(
         hasQueryParameter
             .andExpect(MockMvcResultMatchers.jsonPath("$.data.hobbies.length()", 20).exists())
             .andExpect(MockMvcResultMatchers.jsonPath("$.data.hobbies[0].id").exists())
-            .andExpect(MockMvcResultMatchers.jsonPath("\$.data.hobbies[0].name").exists())
+            .andExpect(MockMvcResultMatchers.jsonPath("\$.data.hobbies[0].shortName").exists())
             .andExpect(MockMvcResultMatchers.jsonPath("\$.data.hobbies[0].recommendCount").exists())
             .andExpect(MockMvcResultMatchers.jsonPath("\$.data.hobbies[0].imageUrl").exists())
 
@@ -79,7 +80,7 @@ class HobbyControllerTest(
         noQueryParameter
             .andExpect(MockMvcResultMatchers.jsonPath("$.data.hobbies.length()", 20).exists())
             .andExpect(MockMvcResultMatchers.jsonPath("$.data.hobbies[0].id").exists())
-            .andExpect(MockMvcResultMatchers.jsonPath("\$.data.hobbies[0].name").exists())
+            .andExpect(MockMvcResultMatchers.jsonPath("\$.data.hobbies[0].shortName").exists())
             .andExpect(MockMvcResultMatchers.jsonPath("\$.data.hobbies[0].recommendCount").exists())
             .andExpect(MockMvcResultMatchers.jsonPath("\$.data.hobbies[0].imageUrl").exists())
     }
