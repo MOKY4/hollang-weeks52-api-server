@@ -37,8 +37,8 @@ class TestResponseManager(
 
         //추론한 취미들의 추천수 카운트 증가
         val hobbyNames = extractHobbyNames(hobbies = getInferringResultResponse.hobbies)
-        val hobbies = hobbyService.getAllByNameIsIn(names = hobbyNames)
-        hobbyService.incrementRecommendCountByNameIsIn(names = hobbyNames)
+        val hobbies = hobbyService.getAllByOriginalNameIsIn(originalNames = hobbyNames)
+        hobbyService.incrementRecommendCountByOriginalNameIsIn(originalNames = hobbyNames)
 
         //추천 취미 엔티티 생성
         val recommendationHobbies = createRecommendationHobbies(
@@ -73,7 +73,7 @@ class TestResponseManager(
     ): MutableList<RecommendationHobby> {
         val recommendationHobbies = hobbies.map { hobby ->
             val ranking = inferringHobbies.find { h ->
-                h["name"]!! == hobby.name
+                h["name"]!! == hobby.originalName
             }?.get("ranking") as Int
             RecommendationHobby(hobby, ranking)
         } as MutableList<RecommendationHobby>

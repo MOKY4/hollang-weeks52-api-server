@@ -41,7 +41,8 @@ data class GetRecommendationResponse(
 
     inner class HobbyDto(@JsonIgnore val hobbyEntity: Hobby, hobbyRanking: Int) {
         val id: Long = hobbyEntity.id!!
-        val name: String = hobbyEntity.name
+        val originalName: String = hobbyEntity.originalName
+        val shortName: String = hobbyEntity.shortName
         val summary: String = hobbyEntity.summary
         val description: String = hobbyEntity.description
         val imageUrl: String = hobbyEntity.imageUrl

@@ -8,7 +8,7 @@ data class GetHobbiesRankResponse(@JsonIgnore val hobbiesEntity: List<Hobby>) {
 
     inner class HobbyDto(@JsonIgnore val hobbyEntity: Hobby){
         val id: Long = hobbyEntity.id!!
-        val name: String = hobbyEntity.name
+        val shortName: String = hobbyEntity.shortName
         val recommendCount: Long = hobbyEntity.recommendCount
         val imageUrl: String = hobbyEntity.imageUrl
     }

@@ -78,12 +78,13 @@ class InitService(
             val row = sheet.getRow(rowIndex)
             if(row.getCell(0) == null) break
 
-            val name = row.getCell(0).stringCellValue
-            val summary = row.getCell(1).stringCellValue
-            val description = row.getCell(2).stringCellValue
-            val imageName = row.getCell(3).stringCellValue
+            val originalName = row.getCell(0).stringCellValue
+            val shortName = row.getCell(1).stringCellValue
+            val summary = row.getCell(2).stringCellValue
+            val description = row.getCell(3).stringCellValue
+            val imageName = row.getCell(4).stringCellValue
             val imageUrl = "${IMG_URL}/images/hobby/$imageName.png"
-            val hobby = Hobby(name, summary, description, imageUrl)
+            val hobby = Hobby(originalName, shortName, summary, description, imageUrl)
             em.persist(hobby)
         }
     }

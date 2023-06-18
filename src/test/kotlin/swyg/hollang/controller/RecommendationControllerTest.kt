@@ -93,7 +93,7 @@ internal class RecommendationControllerTest(
             .andExpect(jsonPath("$.data.recommendation.hobbyType.imageUrl").exists())
             .andExpect(jsonPath("$.data.recommendation.hobbies.length()", 3).exists())
             .andExpect(jsonPath("$.data.recommendation.hobbies[0].id").exists())
-            .andExpect(jsonPath("$.data.recommendation.hobbies[0].name").exists())
+            .andExpect(jsonPath("$.data.recommendation.hobbies[0].shortName").exists())
             .andExpect(jsonPath("$.data.recommendation.hobbies[0].summary").exists())
             .andExpect(jsonPath("$.data.recommendation.hobbies[0].description").exists())
             .andExpect(jsonPath("$.data.recommendation.hobbies[0].imageUrl").exists())
@@ -150,7 +150,7 @@ internal class RecommendationControllerTest(
             .andExpect(jsonPath("$.data.recommendation.hobbyType.imageUrl").exists())
             .andExpect(jsonPath("$.data.recommendation.hobbies.length()", 3).exists())
             .andExpect(jsonPath("$.data.recommendation.hobbies[0].id").exists())
-            .andExpect(jsonPath("$.data.recommendation.hobbies[0].name").exists())
+            .andExpect(jsonPath("$.data.recommendation.hobbies[0].shortName").exists())
             .andExpect(jsonPath("$.data.recommendation.hobbies[0].summary").exists())
             .andExpect(jsonPath("$.data.recommendation.hobbies[0].description").exists())
             .andExpect(jsonPath("$.data.recommendation.hobbies[0].imageUrl").exists())
@@ -182,7 +182,7 @@ internal class RecommendationControllerTest(
         val recommendationResponse =
             recommendationManager.getRecommendationById(recommendationId = createTestResponseResponse.recommendation.id)
         val hobbyDtos = recommendationResponse.recommendation.hobbies.map { hobby ->
-            HobbyDto(hobby.id, hobby.name, 1)
+            HobbyDto(hobby.id, hobby.originalName, 1)
         }
         val createRecommendationSurveyRequest = CreateRecommendationSurveyRequest(CreateSurveyRequest(hobbyDtos))
 
@@ -234,9 +234,9 @@ internal class RecommendationControllerTest(
         em.persist(hobbyType2)
         em.persist(hobbyType3)
 
-        val hobby1 = Hobby("어도비 일러스트레이트", "취미 요약정보", "취미 상세정보", "https://example.com")
-        val hobby2 = Hobby("스토리텔링", "취미 요약정보", "취미 상세정보", "https://example.com")
-        val hobby3 = Hobby("어도비 인디자인", "취미 요약정보", "취미 상세정보", "https://example.com")
+        val hobby1 = Hobby("Adobe illustrator로 나만의 굿즈 만들기", "어도비 일러스트레이트", "취미 요약정보", "취미 상세정보", "https://example.com")
+        val hobby2 = Hobby("사람들을 사로잡는 스토리텔링 시작하기", "스토리텔링", "취미 요약정보", "취미 상세정보", "https://example.com")
+        val hobby3 = Hobby("Adobe InDesign으로 편집 디자인 시작하기", "어도비 인디자인", "취미 요약정보", "취미 상세정보", "https://example.com")
         em.persist(hobby1)
         em.persist(hobby2)
         em.persist(hobby3)

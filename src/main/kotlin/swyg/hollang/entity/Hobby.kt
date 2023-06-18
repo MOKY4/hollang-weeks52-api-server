@@ -7,11 +7,14 @@ import swyg.hollang.entity.common.BaseTimeEntity
 
 @Entity
 @DynamicInsert  //DML 작동시 null값이 아닌 값만 작동함
-@Table(indexes = [Index(name = "idx_name", columnList = "name")])
+@Table(indexes = [Index(name = "idx_original_name", columnList = "original_name")])
 class Hobby (
 
-    @Column(name = "name", nullable = false)
-    val name: String,
+    @Column(name = "original_name", nullable = false)
+    val originalName: String,
+
+    @Column(name = "short_name", nullable = false)
+    val shortName: String,
 
     @Column(name = "summary", nullable = false)
     val summary: String,

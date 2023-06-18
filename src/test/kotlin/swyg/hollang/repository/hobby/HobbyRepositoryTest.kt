@@ -22,16 +22,16 @@ internal class HobbyRepositoryTest(@Autowired val hobbyRepository: HobbyReposito
     @DisplayName("취미 이름들로 취미들 조회")
     fun findByNameIsIn() {
         // given
-        val hobby1 = Hobby("취미1", "취미 요약정보", "취미 상세정보", "https://example.com")
-        val hobby2 = Hobby("취미2", "취미 요약정보", "취미 상세정보", "https://example.com")
-        val hobby3 = Hobby("취미3", "취미 요약정보", "취미 상세정보", "https://example.com")
+        val hobby1 = Hobby("취미1", "취미1 요약", "취미 요약정보", "취미 상세정보", "https://example.com")
+        val hobby2 = Hobby("취미2", "취미2 요약", "취미 요약정보", "취미 상세정보", "https://example.com")
+        val hobby3 = Hobby("취미3", "취미3 요약", "취미 요약정보", "취미 상세정보", "https://example.com")
         hobbyRepository.save(hobby1)
         hobbyRepository.save(hobby2)
         hobbyRepository.save(hobby3)
 
         // when
         val hobbyNames = listOf("취미1", "취미2", "취미3")
-        val findHobbies = hobbyRepository.findByNameIsIn(hobbyNames)
+        val findHobbies = hobbyRepository.findByOriginalNameIsIn(hobbyNames)
 
         // then
         assertThat(findHobbies.size).isSameAs(3)
@@ -41,11 +41,11 @@ internal class HobbyRepositoryTest(@Autowired val hobbyRepository: HobbyReposito
     @DisplayName("모든 취미들을 정렬하여 조회")
     fun findAll() {
         // given
-        val hobby1 = Hobby("취미1", "취미 요약정보", "취미 상세정보", "https://example.com")
+        val hobby1 = Hobby("취미1", "취미1 요약", "취미 요약정보", "취미 상세정보", "https://example.com")
         hobby1.recommendCount = 3
-        val hobby2 = Hobby("취미2", "취미 요약정보", "취미 상세정보", "https://example.com")
+        val hobby2 = Hobby("취미2", "취미2 요약", "취미 요약정보", "취미 상세정보", "https://example.com")
         hobby2.recommendCount = 2
-        val hobby3 = Hobby("취미3", "취미 요약정보", "취미 상세정보", "https://example.com")
+        val hobby3 = Hobby("취미3", "취미3 요약", "취미 요약정보", "취미 상세정보", "https://example.com")
         hobby3.recommendCount = 1
         hobbyRepository.save(hobby1)
         hobbyRepository.save(hobby2)
@@ -64,11 +64,11 @@ internal class HobbyRepositoryTest(@Autowired val hobbyRepository: HobbyReposito
     @DisplayName("취미 이름들로 취미들의 추천수를 1씩 증가")
     fun incrementRecommendCountByNameIsIn() {
         // given
-        val hobby1 = Hobby("취미1", "취미 요약정보", "취미 상세정보", "https://example.com")
+        val hobby1 = Hobby("취미1", "취미1 요약", "취미 요약정보", "취미 상세정보", "https://example.com")
         hobby1.recommendCount = 3
-        val hobby2 = Hobby("취미2", "취미 요약정보", "취미 상세정보", "https://example.com")
+        val hobby2 = Hobby("취미2", "취미2 요약", "취미 요약정보", "취미 상세정보", "https://example.com")
         hobby2.recommendCount = 2
-        val hobby3 = Hobby("취미3", "취미 요약정보", "취미 상세정보", "https://example.com")
+        val hobby3 = Hobby("취미3", "취미3 요약", "취미 요약정보", "취미 상세정보", "https://example.com")
         hobby3.recommendCount = 1
         hobbyRepository.save(hobby1)
         hobbyRepository.save(hobby2)
@@ -76,7 +76,7 @@ internal class HobbyRepositoryTest(@Autowired val hobbyRepository: HobbyReposito
 
         // when
         val hobbyNames = listOf("취미1", "취미2", "취미3")
-        val updatedHobbyCount = hobbyRepository.incrementRecommendCountByNameIsIn(names = hobbyNames)
+        val updatedHobbyCount = hobbyRepository.incrementRecommendCountByOriginalNameIsIn(names = hobbyNames)
 
         // then
         assertThat(updatedHobbyCount).isSameAs(3)

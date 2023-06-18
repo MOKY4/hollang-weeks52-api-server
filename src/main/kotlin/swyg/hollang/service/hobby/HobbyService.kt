@@ -11,17 +11,17 @@ import swyg.hollang.repository.hobby.HobbyRepository
 @Transactional(readOnly = true)
 class HobbyService(private val hobbyRepository: HobbyRepository) {
 
-    fun incrementRecommendCountByNameIsIn(names: List<String>): Int {
+    fun incrementRecommendCountByOriginalNameIsIn(originalNames: List<String>): Int {
         //추천받은 취미의 추천 카운트를 1씩 증가
-        val incrementCount = hobbyRepository.incrementRecommendCountByNameIsIn(names)
-        return if(incrementCount != names.size) {
+        val incrementCount = hobbyRepository.incrementRecommendCountByOriginalNameIsIn(originalNames)
+        return if(incrementCount != originalNames.size) {
             throw IllegalArgumentException("찾을 수 없는 이름의 취미가 존재합니다")
         } else incrementCount
     }
 
-    fun getAllByNameIsIn(names: List<String>): List<Hobby> {
-        val findHobbies = hobbyRepository.findByNameIsIn(names)
-        return if(findHobbies.size != names.size) {
+    fun getAllByOriginalNameIsIn(originalNames: List<String>): List<Hobby> {
+        val findHobbies = hobbyRepository.findByOriginalNameIsIn(originalNames)
+        return if(findHobbies.size != originalNames.size) {
             throw IllegalArgumentException("찾을 수 없는 이름의 취미가 존재합니다")
         } else findHobbies
     }
