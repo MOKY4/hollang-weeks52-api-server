@@ -1,17 +1,41 @@
 version: "3.8"
 services:
-  database:
-    container_name: hollang-database-local
-    image: "mysql"
+  hollang-weeks52-api-server:
+    container_name: hollang-weeks52-api-server
+    depends_on:
+      - hollang-weeks52-inferring-server
+      - hollang-mysql-server
+    image: "${HOLLANG_WEEKS52_API_SERVER_REPOSITORY}:latest"
     restart: always
-    volumes:
-      - hollang-database-local-data:/var/lib/mysql
+    env_file:
+      - ./env/local/.env
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    networks:
+      - hollang-weeks52-network
+  hollang-weeks52-inferring-server:
+    depends_on:
+      - hollang-mysql-server
+    container_name: hollang-weeks52-inferring-server
+    image: "${HOLLANG_WEEKS52_INFERRING_SERVER_REPOSITORY}:latest"
+    restart: always
+    ports:
+      - "5000:5000"
+    networks:
+      - hollang-weeks52-network
+  hollang-mysql-server:
+    container_name: hollang-mysql-server
+    image: "mysql"
     environment:
-      MYSQL_ROOT_USERNAME: root
-      MYSQL_ROOT_PASSWORD: 11111111
       MYSQL_DATABASE: hollang_local
+      MYSQL_ROOT_PASSWORD: 11111111
     ports:
       - "3306:3306"
+    networks:
+      - hollang-weeks52-network
 
-volumes:
-  hollang-database-local-data:
+networks:
+  hollang-weeks52-network:
+    driver: bridge

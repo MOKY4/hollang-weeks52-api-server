@@ -1,0 +1,14 @@
+FROM amazoncorretto:17-alpine
+
+WORKDIR /app
+
+ARG JAR_FILE=./build/libs/hollang-weeks52-1.0.0.jar
+
+COPY src/main/resources/static/initData.xlsx /app/static/initData.xlsx
+COPY ${JAR_FILE} hollang-weeks52-local.jar
+
+ENV PROFILES local
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-Dspring.profiles.active=${PROFILES}", "-jar", "/app/hollang-weeks52-local.jar"]
