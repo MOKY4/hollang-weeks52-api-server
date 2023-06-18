@@ -44,7 +44,7 @@
 
 ### 전체 구조
 
-![All Infrastructure](./readme_files/infrastructure_all.png)
+![All Infrastructure](asset/images/infrastructure_all.png)
 
 - EC2 인스턴스 하나에 도커 컨테이너 3개(API Server, Inferring Server, MySQL Server)를 띄워서 관리할 수 있도록 구성하였다.
   - 각각의 컨테이너들은 독립적으로 구성되지만, 하나의 도커 네트워크를 이용하여 각각의 IP로의 통신이 아닌 컨테이너 이름으로의 통신이 가능하도록 설계하였다. → IP로의 통신은 컨테이너를 띄울때 변할수 있기 때문에 IP로의 통신은 구성하지 않았다.
@@ -54,7 +54,7 @@
 
 ### 개발 환경
 
-![Development Infrastructure](./readme_files/infrastructure_dev.png)
+![Development Infrastructure](asset/images/infrastructure_dev.png)
 
 - EC2 인스턴스 하나에 도커 컨테이너 3개(API Server, Inferring Server, MySQL Server)를 띄워서 관리할 수 있도록 구성하였다.
   - 각각의 컨테이너들은 독립적으로 구성되지만, 하나의 도커 네트워크를 이용하여 각각의 IP로의 통신이 아닌 컨테이너 이름으로의 통신이 가능하도록 설계하였다. → IP로의 통신은 컨테이너를 띄울때 변할수 있기 때문에 IP로의 통신은 구성하지 않았다.
@@ -64,7 +64,7 @@
 
 ### 운영 환경
 
-![Production Infrastructure](./readme_files/infrastructure_prod.png)
+![Production Infrastructure](asset/images/infrastructure_prod.png)
 
 - EC2 인스턴스 두개에 각각 도커 컨테이너 1개씩(API Server, Inferring Server)를 띄워서 관리할 수 있도록 구성하였다.
   - API Server가 띄워져있는 EC2를 제외한 Flask Server EC2 인스턴스는 Public으로 노출하지 않아서 외부로부터 트래픽을 받을 수 없게 설계하였다. 또한 API Server는 인스턴스 자체를 외부로 노출시키는 것이 아니라 로드밸런서로부터의 트래픽만 받을 수 있도록 설계하였다.
@@ -75,7 +75,7 @@
 
 ### CI/CD Pipeline
 
-![CI/CD Pipeline](./readme_files/ci_cd_pipeline.png)
+![CI/CD Pipeline](asset/images/ci_cd_pipeline.png)
 
 1. 개발자가 GitHub 원격 저장소의 develop 또는 main 브랜치로 Push & Merge를 하면 이벤트 트리거가 작동한다.
 2. 이벤트 트리거는 저장소에 존재하는 애플리케이션 소스코드를 다운로드받고 빌드하고 캐시하는 작업을 수행한다.
@@ -84,16 +84,16 @@
 5. AWS CodeDeploy에서 새로운 배포를 생성한다.
 6. 이 과정에서는 develop과 production이 다른 배포 전략으로 배포를 수행한다. 
    - develop 인스턴스는 무중단 배포가 필요없기 때문에 다음과 같이 한번에 새로운 배포를 하는 전략을 사용하여 구축하였다. 일단 CodeDeploy가 실행중이면 해당 인스턴스는 중지상태가 된다. 따라서 배포중에는 어떤 트래픽도 들어오지 못한다. 배포중에는 이전의 도커 컨테이너를 중지시키고 새로운 버전의 이미지로 도커 컨테이너를 띄우는 전략을 사용했다.
-     ![AllAtOnce Strategy](./readme_files/codedeploy_allatonce_strategy.png)
+     ![AllAtOnce Strategy](asset/images/codedeploy_allatonce_strategy.png)
 
    - production 인스턴스는 오토스케일링과 로드 밸런서를 이용해서 배포를 수행한다. 배포가 성공적으로 완료되면 오토 스케일링 그룹이 새로운 배포를 위한 새로운 인스턴스를 생성한다. 로드 밸런서는 새로운 버전의 인스턴스가 모든게 성공적으로 완료되면 이전의 인스턴스로 가던 트래픽을 끊고 새로운 인스턴스로의 트래픽을 전달하게 된다. 또한 새로운 버전을 배포하고 서버가 안정화가 되면 오토 스케일링 그룹이 이것을 인식하고 이전 버전의 인스턴스를 종료시킨다.
-     ![Blue/Green Strategy](./readme_files/codedeploy_blue_green_strategy.png)
+     ![Blue/Green Strategy](asset/images/codedeploy_blue_green_strategy.png)
 7. 배포하는 과정에서 이전에 S3에 저장했던 스크립트 파일들을 가져온다.
 
 ## 📝 테이블 정의서(Entity Details)
 
-[Table Description](./readme_files/Hollang_table_desc.pdf)
+[Table Description](asset/images/Hollang_table_desc.pdf)
 
 ## 🔗 엔티티-관계 모델(Entity Relationship Diagram)
 
-![ERD](./readme_files/Hollang_ERD.png)
+![ERD](asset/images/Hollang_ERD.png)
