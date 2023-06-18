@@ -6,11 +6,11 @@ import jakarta.persistence.PersistenceContext
 import org.apache.poi.ss.usermodel.Workbook
 import org.apache.poi.ss.usermodel.WorkbookFactory
 import org.springframework.context.annotation.Profile
-import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import swyg.hollang.entity.*
 import swyg.hollang.repository.test.TestJpaRepository
+import java.io.FileNotFoundException
 import java.io.InputStream
 
 @Component
@@ -35,12 +35,12 @@ class InitService(
     @PersistenceContext
     private lateinit var em: EntityManager
 
-    private final val INIT_DATA_PATH = "/static/initData.xlsx"
+    private final val INIT_DATA_PATH = "static/initData.xlsx"
     private final val IMG_URL = "https://test.com"
 
     fun initFile(): Workbook {
-        val file = ClassPathResource(INIT_DATA_PATH).file
-        val inputStream: InputStream = file.inputStream()
+        val inputStream: InputStream = Thread.currentThread().contextClassLoader.getResourceAsStream(INIT_DATA_PATH)
+            ?: throw FileNotFoundException("Resource file not found: $INIT_DATA_PATH")
 
         return WorkbookFactory.create(inputStream)
     }
