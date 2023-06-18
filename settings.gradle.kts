@@ -1,1 +1,1 @@
-rootProject.name = "hollang"
+rootProject.name = "hollang-weeks52"
