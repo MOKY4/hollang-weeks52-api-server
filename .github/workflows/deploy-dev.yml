@@ -1,0 +1,56 @@
+name: Deploy hollang x weeks52 API Server
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'develop'
+env:
+  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+  DOCKERHUB_API_SERVER_REPOSITORY: hollang-weeks52-api-server-dev
+  IMAGE_TAG: ${{ github.sha }}
+jobs:
+  build-and-deploy:
+    environment: develop
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout source code
+      - name: Checkout code
+        uses: actions/checkout@v3
+      # Setting JDK 17
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'corretto'
+      # Cache gradle
+      - name: Gradle Caching
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ./.gradle/caches
+            ./.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      # Build and test
+      - name: Build and Test with Gradle
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: ./gradlew clean build -x test
+        shell: bash
+      # Build docker image and push to dockerhub
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ env.DOCKERHUB_USERNAME }}
+          password: ${{ env.DOCKERHUB_PASSWORD }}
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile-dev
+          push: true
+          tags: ${{ env.DOCKERHUB_USERNAME }}/${{ env.DOCKERHUB_API_SERVER_REPOSITORY }}:latest

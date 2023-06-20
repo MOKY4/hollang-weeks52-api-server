@@ -10,7 +10,6 @@ plugins {
     kotlin("kapt") version "1.7.21"
 }
 
-// plugins, dependencies와 같은 Level (build.gradle 최상단)
 allOpen {
     annotation("jakarta.persistence.Entity")
     annotation("jakarta.persistence.MappedSuperclass")

@@ -1,32 +1,32 @@
 version: "3.8"
 services:
-  hollang-weeks52-api-server:
-    container_name: hollang-weeks52-api-server
+  hollang-weeks52-api-server-dev:
+    container_name: hollang-weeks52-api-server-dev
     depends_on:
-      - hollang-weeks52-inferring-server
-      - hollang-mysql-server
+      - hollang-weeks52-inferring-server-dev
+      - hollang-weeks52-mysql-server-dev
     image: "${HOLLANG_WEEKS52_API_SERVER_REPOSITORY}:latest"
     restart: always
     env_file:
-      - ./env/local/.env
+      - env/dev/.env
     ports:
       - "8080:8080"
     expose:
       - "8080"
     networks:
       - hollang-weeks52-network
-  hollang-weeks52-inferring-server:
+  hollang-weeks52-inferring-server-dev:
     depends_on:
-      - hollang-mysql-server
-    container_name: hollang-weeks52-inferring-server
+      - hollang-weeks52-mysql-server-dev
+    container_name: hollang-weeks52-inferring-server-dev
     image: "${HOLLANG_WEEKS52_INFERRING_SERVER_REPOSITORY}:latest"
     restart: always
     ports:
       - "5000:5000"
     networks:
       - hollang-weeks52-network
-  hollang-mysql-server:
-    container_name: hollang-mysql-server
+  hollang-weeks52-mysql-server-dev:
+    container_name: hollang-weeks52-mysql-server-dev
     image: "mysql"
     environment:
       MYSQL_DATABASE: hollang_local

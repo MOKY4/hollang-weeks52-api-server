@@ -1,5 +1,5 @@
 server:
-  port: 80
+  port: 8080
 
 spring:
   config:
@@ -7,9 +7,10 @@ spring:
       on-profile: dev
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${MYSQL_HOST}:3306/${MYSQL_DATABASE}?rewriteBatchedStatements=true
-    username: ${MYSQL_ROOT_USERNAME}
-    password: ${MYSQL_ROOT_PASSWORD}
+    # rewriteBatchedStatements=true -> Batch Insert 옵션 ON
+    url: jdbc:mysql://${MYSQL_SERVER_HOST}:3306/hollang_dev?rewriteBatchedStatements=true&profileSQL=true&logger=Slf4JLogger&maxQuerySizeToLog=1000
+    username: root
+    password: 11111111
   jpa:
     generate-ddl: true
     hibernate:
@@ -19,7 +20,14 @@ spring:
         format_sql: true
 
 logging:
-  config: classpath:logback.xml
   level:
     root: INFO
     swyg.hollang: DEBUG
+    org:
+      hibernate:
+        SQL: DEBUG
+        type: TRACE
+      springframework:
+        jdbc:
+          core:
+            JdbcTemplate: DEBUG
