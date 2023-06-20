@@ -8,7 +8,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     # rewriteBatchedStatements=true -> Batch Insert 옵션 ON
-    url: jdbc:mysql://${MYSQL_SERVER_HOST}:3306/hollang_local?rewriteBatchedStatements=true&profileSQL=true&logger=Slf4JLogger&maxQuerySizeToLog=1000
+    url: jdbc:mysql://127.0.0.1:3306/hollang_local?rewriteBatchedStatements=true&profileSQL=true&logger=Slf4JLogger&maxQuerySizeToLog=1000
     username: root
     password: 11111111
   jpa:

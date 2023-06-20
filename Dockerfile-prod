@@ -2,12 +2,12 @@ FROM amazoncorretto:17-alpine
 
 WORKDIR /app
 
-ARG JAR_FILE=./build/libs/hollang-1.0.0.jar
+ARG JAR_FILE=./build/libs/hollang-weeks52-1.0.0.jar
 
-COPY ${JAR_FILE} hollang-prod.jar
+COPY ${JAR_FILE} hollang-weeks52-prod.jar
 
 ENV PROFILES prod
 
 EXPOSE 80
 
-ENTRYPOINT ["java", "-Dspring.profiles.active=${PROFILES}", "-jar", "/app/hollang-prod.jar"]
+ENTRYPOINT ["java", "-Dspring.profiles.active=${PROFILES}", "-jar", "/app/hollang-weeks52-prod.jar"]

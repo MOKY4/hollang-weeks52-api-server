@@ -1,0 +1,130 @@
+name: Deploy hollang x weeks52 API Server
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'release/**'
+    paths-ignore:
+      - 'src/main/resources/static/initData.xlsx'
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  ECR_API_SERVER_REPOSITORY: hollang-weeks52-api-server-stage
+  ECR_INFERRING_SERVER_REPOSITORY: hollang-weeks52-inferring-server-stage
+  S3_DEPLOY_BUCKET: ${{ secrets.AWS_DEPLOY_BUCKET }}
+  S3_DEPLOY_BUCKET_DESTINATION_DIRECTORY: stage
+  CODE_DEPLOY_GROUP_NAME: hollang-weeks52-stage
+  IMAGE_TAG: ${{ github.sha }}
+jobs:
+  test-and-build:
+    environment: test
+    runs-on: ubuntu-latest
+    env:
+      ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+    steps:
+      # Configure to AWS
+      - name: aws configure
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+      # Login to ECR
+      - name: Login to ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      # Pull inferring server and run
+      - name: Pull inferring server image and run
+        run: |
+          docker pull $ECR_REGISTRY/$ECR_INFERRING_SERVER_REPOSITORY:latest
+          docker run -d -p 5000:5000 --name hollang-weeks52-inferring-server $ECR_REGISTRY/$ECR_INFERRING_SERVER_REPOSITORY:latest
+      # Checkout source code
+      - name: Checkout code
+        uses: actions/checkout@v3
+      # Setting JDK 17
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'corretto'
+      # Cache gradle
+      - name: Gradle Caching
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ./.gradle/caches
+            ./.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      # Build and test
+      - name: Build and Test with Gradle
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: ./gradlew clean build
+        shell: bash
+      # Build docker image and push to AWS ECR
+      - name: Build docker image
+        run: docker build -t $ECR_REGISTRY/$ECR_API_SERVER_REPOSITORY:$IMAGE_TAG -f Dockerfile-stage .
+      # Push docker image to AWS ECR
+      - name: Push docker image
+        run: docker push $ECR_REGISTRY/$ECR_API_SERVER_REPOSITORY:$IMAGE_TAG
+  deploy:
+    needs: test-and-build
+    environment: stage
+    runs-on: ubuntu-latest
+    env:
+      ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+    steps:
+      # Checkout source code
+      - name: Checkout code
+        uses: actions/checkout@v3
+      # Configure to AWS
+      - name: aws configure
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+      # Login to ECR
+      - name: Login to ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      # Set AWS Codedeploy script files
+      - name: Set AWS Codedeploy script files
+        run: |
+          mkdir scripts
+          echo "docker stop $(docker ps -aq)" > scripts/stop_services.sh
+          echo "docker rm $(docker ps -aq)" >> scripts/stop_services.sh
+          echo "docker rmi -f $(docker images -aq)" >> scripts/stop_services.sh
+          
+          echo "aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin $ECR_REGISTRY" > scripts/config_services.sh
+          echo "docker pull $ECR_REGISTRY/$ECR_INFERRING_SERVER_REPOSITORY:latest" >> scripts/config_services.sh
+          echo "docker pull $ECR_REGISTRY/$ECR_API_SERVER_REPOSITORY:latest" >> scripts/config_services.sh
+          
+          echo "ECR_REGISTRY=$ECR_REGISTRY docker-compose -f ../docker-compose-stage.yml up -d" > scripts/start_services.sh
+      # Setting environment file
+      - name: Setting env files
+        run: echo "${{ secrets.ENV }}" > .env
+        shell: bash
+      # Zip deploy files
+      - name: Zip deploy files
+        run: |
+          zip -r hollang-weeks52-deploy-$IMAGE_TAG.zip ./scripts docker-compose.stage.yml .env appspec.yml
+      # Upload deploy files to AWS S3
+      - name: Upload deploy files to AWS S3
+        uses: hkusu/s3-upload-action@v2
+        with:
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+          aws-bucket: ${{ env.S3_DEPLOY_BUCKET }}
+          destination-dir: ${{ env.S3_DEPLOY_BUCKET_DESTINATION_DIRECTORY }}
+          file-path: ./hollang-weeks52-deploy-${{ env.IMAGE_TAG }}.zip
+      # Deploy application
+      - name: Deploy application
+        run: |
+          aws deploy create-deployment --application-name HollangApplication-stage \
+          --deployment-config-name CodeDeployDefault.OneAtATime \
+          --deployment-group-name $CODE_DEPLOY_GROUP_NAME \
+          --s3-location bucket=$S3_DEPLOY_BUCKET,bundleType=zip,key=$S3_DEPLOY_BUCKET_DESTINATION_DIRECTORY/hollang-weeks52-deploy-$IMAGE_TAG.zip

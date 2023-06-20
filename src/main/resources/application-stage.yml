@@ -1,0 +1,18 @@
+server:
+  port: 80
+
+spring:
+  config:
+    activate:
+      on-profile: stage
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST}:3306/${MYSQL_DATABASE}?rewriteBatchedStatements=true
+    username: ${MYSQL_ROOT_USERNAME}
+    password: ${MYSQL_ROOT_PASSWORD}
+
+logging:
+  config: classpath:logback.xml
+  level:
+    root: INFO
+    swyg.hollang: DEBUG
