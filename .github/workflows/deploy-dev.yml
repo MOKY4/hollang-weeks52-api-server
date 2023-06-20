@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - 'develop'
+    paths:
+      - '.github/workflows/deploy-dev.yml'
+      - 'src/**'
+      - '.dockerignore'
+      - 'Dockerfile-dev'
 env:
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
