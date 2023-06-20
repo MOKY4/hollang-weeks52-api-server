@@ -1,6 +1,7 @@
 version: "3.8"
 services:
   hollang-weeks52-api-server-dev:
+    platform: linux/amd64
     container_name: hollang-weeks52-api-server-dev
     depends_on:
       - hollang-weeks52-inferring-server-dev
@@ -16,6 +17,7 @@ services:
     networks:
       - hollang-weeks52-network
   hollang-weeks52-inferring-server-dev:
+    platform: linux/amd64
     depends_on:
       - hollang-weeks52-mysql-server-dev
     container_name: hollang-weeks52-inferring-server-dev
@@ -26,6 +28,7 @@ services:
     networks:
       - hollang-weeks52-network
   hollang-weeks52-mysql-server-dev:
+    platform: linux/amd64
     container_name: hollang-weeks52-mysql-server-dev
     image: "mysql"
     environment:
