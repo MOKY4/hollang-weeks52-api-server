@@ -14,7 +14,7 @@ import java.io.FileNotFoundException
 import java.io.InputStream
 
 @Component
-@Profile(value = ["local"])
+@Profile(value = ["local", "dev"])
 class InitDb(private val initService: InitService) {
 
     @PostConstruct
@@ -27,7 +27,7 @@ class InitDb(private val initService: InitService) {
 
 @Component
 @Transactional
-@Profile(value = ["local"])
+@Profile(value = ["local", "dev"])
 class InitService(
     val testJpaRepository: TestJpaRepository
 ) {
