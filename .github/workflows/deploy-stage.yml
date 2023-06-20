@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - 'release/**'
+      - 'stage'
     paths-ignore:
       - 'src/main/resources/static/initData.xlsx'
 env:
