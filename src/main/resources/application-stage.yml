@@ -12,7 +12,6 @@ spring:
     password: ${MYSQL_ROOT_PASSWORD}
 
 logging:
-  config: classpath:logback.xml
   level:
     root: INFO
     swyg.hollang: INFO
