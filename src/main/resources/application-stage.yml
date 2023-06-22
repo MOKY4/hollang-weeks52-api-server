@@ -15,4 +15,4 @@ logging:
   config: classpath:logback.xml
   level:
     root: INFO
-    swyg.hollang: DEBUG
+    swyg.hollang: INFO
