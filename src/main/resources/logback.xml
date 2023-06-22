@@ -15,12 +15,12 @@
         </layout>
     </appender>
 
-    <appender name="aws_cloud_watch_log_dev" class="ca.pjer.logback.AwsLogsAppender">
+    <appender name="aws_cloud_watch_log_stage" class="ca.pjer.logback.AwsLogsAppender">
         <layout>
             <pattern>[%thread] [%date] [%level] [%file:%line] - %msg%n</pattern>
         </layout>
-        <logGroupName>hollang-LG</logGroupName>
-        <logStreamUuidPrefix>hollang-dev-</logStreamUuidPrefix>
+        <logGroupName>hollang-weeks52-LG</logGroupName>
+        <logStreamUuidPrefix>hollang-week252-stage-</logStreamUuidPrefix>
         <logRegion>ap-northeast-2</logRegion>
         <maxBatchLogEvents>50</maxBatchLogEvents>
         <maxFlushTimeMillis>30000</maxFlushTimeMillis>
@@ -32,8 +32,8 @@
         <layout>
             <pattern>[%thread] [%date] [%level] [%file:%line] - %msg%n</pattern>
         </layout>
-        <logGroupName>hollang-LG</logGroupName>
-        <logStreamUuidPrefix>hollang-prod-</logStreamUuidPrefix>
+        <logGroupName>hollang-weeks52-LG</logGroupName>
+        <logStreamUuidPrefix>hollang-weeks52-prod-</logStreamUuidPrefix>
         <logRegion>ap-northeast-2</logRegion>
         <maxBatchLogEvents>50</maxBatchLogEvents>
         <maxFlushTimeMillis>30000</maxFlushTimeMillis>
@@ -75,9 +75,8 @@
         <logger name="com.amazonaws.util.EC2MetadataUtils" level="error" additivity="false">
         </logger>
 
-        <logger name="swyg.hollang" level="debug" additivity="false">
-            <appender-ref ref="CONSOLE"/>
-            <appender-ref ref="aws_cloud_watch_log_dev"/>
+        <logger name="swyg.hollang" level="info" additivity="false">
+            <appender-ref ref="aws_cloud_watch_log_stage"/>
         </logger>
     </springProfile>
 
