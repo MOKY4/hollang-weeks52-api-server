@@ -4,7 +4,7 @@ services:
     container_name: hollang-weeks52-api-server-stage
     depends_on:
       - hollang-weeks52-inferring-server-stage
-    image: ${ECR_REGISTRY}/hollang-weeks52-api-server-stage:latest
+    image: ${ECR_REGISTRY}/hollang-weeks52-api-server-stage:${IMAGE_TAG}
     restart: always
     env_file:
       - .env

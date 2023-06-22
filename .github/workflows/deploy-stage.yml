@@ -6,6 +6,12 @@ on:
       - 'stage'
     paths-ignore:
       - 'src/main/resources/static/initData.xlsx'
+      - 'deploy-prod.yml'
+      - 'deploy-dev.yml'
+      - 'Dockerfile-prod'
+      - 'Dockerfile-dev'
+      - 'docker-compose.prod.yml'
+      - 'docker-compose.dev.yml'
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -13,14 +19,12 @@ env:
   ECR_INFERRING_SERVER_REPOSITORY: hollang-weeks52-inferring-server-stage
   S3_DEPLOY_BUCKET: ${{ secrets.AWS_DEPLOY_BUCKET }}
   S3_DEPLOY_BUCKET_DESTINATION_DIRECTORY: stage
-  CODE_DEPLOY_GROUP_NAME: hollang-weeks52-stage
+  CODE_DEPLOY_GROUP_NAME: stage
   IMAGE_TAG: ${{ github.sha }}
 jobs:
   test-and-build:
     environment: test
     runs-on: ubuntu-latest
-    env:
-      ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
     steps:
       # Configure to AWS
       - name: aws configure
@@ -35,6 +39,8 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
       # Pull inferring server and run
       - name: Pull inferring server image and run
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
           docker pull $ECR_REGISTRY/$ECR_INFERRING_SERVER_REPOSITORY:latest
           docker run -d -p 5000:5000 --name hollang-weeks52-inferring-server $ECR_REGISTRY/$ECR_INFERRING_SERVER_REPOSITORY:latest
@@ -65,16 +71,18 @@ jobs:
         shell: bash
       # Build docker image and push to AWS ECR
       - name: Build docker image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: docker build -t $ECR_REGISTRY/$ECR_API_SERVER_REPOSITORY:$IMAGE_TAG -f Dockerfile-stage .
       # Push docker image to AWS ECR
       - name: Push docker image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: docker push $ECR_REGISTRY/$ECR_API_SERVER_REPOSITORY:$IMAGE_TAG
   deploy:
     needs: test-and-build
     environment: stage
     runs-on: ubuntu-latest
-    env:
-      ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
     steps:
       # Checkout source code
       - name: Checkout code
@@ -92,6 +100,8 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
       # Set AWS Codedeploy script files
       - name: Set AWS Codedeploy script files
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
           mkdir scripts
           echo "docker stop $(docker ps -aq)" > scripts/stop_services.sh
@@ -102,7 +112,7 @@ jobs:
           echo "docker pull $ECR_REGISTRY/$ECR_INFERRING_SERVER_REPOSITORY:latest" >> scripts/config_services.sh
           echo "docker pull $ECR_REGISTRY/$ECR_API_SERVER_REPOSITORY:latest" >> scripts/config_services.sh
           
-          echo "ECR_REGISTRY=$ECR_REGISTRY docker-compose -f ../docker-compose-stage.yml up -d" > scripts/start_services.sh
+          echo "ECR_REGISTRY=$ECR_REGISTRY IMAGE_TAG=$IMAGE_TAG docker-compose -f ../docker-compose-stage.yml up -d" > scripts/start_services.sh
       # Setting environment file
       - name: Setting env files
         run: echo "${{ secrets.ENV }}" > .env
@@ -124,7 +134,7 @@ jobs:
       # Deploy application
       - name: Deploy application
         run: |
-          aws deploy create-deployment --application-name HollangApplication-stage \
+          aws deploy create-deployment --application-name HollangWeeks52Application \
           --deployment-config-name CodeDeployDefault.OneAtATime \
           --deployment-group-name $CODE_DEPLOY_GROUP_NAME \
           --s3-location bucket=$S3_DEPLOY_BUCKET,bundleType=zip,key=$S3_DEPLOY_BUCKET_DESTINATION_DIRECTORY/hollang-weeks52-deploy-$IMAGE_TAG.zip
