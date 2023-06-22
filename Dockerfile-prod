@@ -2,7 +2,7 @@ FROM amazoncorretto:17-alpine
 
 WORKDIR /app
 
-ARG PROFILES=prod
+ENV PROFILES=prod
 
 ARG ORIGINAL_JAR_FILE=./build/libs/hollang-weeks52-1.0.0.jar
 ARG COPYIED_JAR_FILE=hollang-weeks52-${PROFILES}.jar
