@@ -13,11 +13,11 @@ services:
     expose:
       - "80"
     logging:
-      driver: awslogs
+      driver: "awslogs"
       options:
-        awslogs-region: ap-northeast-2
-        awslogs-group: hollang-weeks52-LG
-        awslogs-create-group: true
+        awslogs-region: "ap-northeast-2"
+        awslogs-group: "hollang-weeks52-LG"
+        awslogs-create-group: "true"
     networks:
       - hollang-weeks52-network
   hollang-weeks52-inferring-server-stage:
