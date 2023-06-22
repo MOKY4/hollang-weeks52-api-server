@@ -112,7 +112,7 @@ jobs:
           echo "docker pull $ECR_REGISTRY/$ECR_INFERRING_SERVER_REPOSITORY:latest" >> scripts/config_services.sh
           echo "docker pull $ECR_REGISTRY/$ECR_API_SERVER_REPOSITORY:$IMAGE_TAG" >> scripts/config_services.sh
           
-          echo "ECR_REGISTRY=$ECR_REGISTRY IMAGE_TAG=$IMAGE_TAG docker-compose -f ../docker-compose.stage.yml up -d" > scripts/start_services.sh
+          echo "ECR_REGISTRY=$ECR_REGISTRY IMAGE_TAG=$IMAGE_TAG docker-compose -f docker-compose.stage.yml up -d" > scripts/start_services.sh
       # Setting environment file
       - name: Setting env files
         run: echo "${{ secrets.ENV }}" > .env
