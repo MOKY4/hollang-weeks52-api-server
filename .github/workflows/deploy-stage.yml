@@ -129,6 +129,7 @@ jobs:
           aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
           aws-bucket: ${{ env.S3_DEPLOY_BUCKET }}
+          bucket-root: /
           destination-dir: ${{ env.S3_DEPLOY_BUCKET_DESTINATION_DIRECTORY }}
           file-path: ./hollang-weeks52-deploy-${{ env.IMAGE_TAG }}.zip
       # Deploy application
