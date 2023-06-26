@@ -27,9 +27,9 @@ internal class HobbyServiceTest(
         // given
         val validNames = listOf("취미1", "취미2", "취미3")
         val invalidNames = listOf("취미4", "취미5", "취미6")
-        val hobby1 = Hobby(validNames[0], "취미1 요약","취미 요약정보", "취미 상세정보", "https://example.com")
-        val hobby2 = Hobby(validNames[1], "취미2 요약","취미 요약정보", "취미 상세정보", "https://example.com")
-        val hobby3 = Hobby(validNames[2], "취미3 요약", "취미 요약정보", "취미 상세정보", "https://example.com")
+        val hobby1 = Hobby(validNames[0], "취미1 요약","취미 요약정보", "취미 상세정보", "https://example.com", "https://weeks52.me")
+        val hobby2 = Hobby(validNames[1], "취미2 요약","취미 요약정보", "취미 상세정보", "https://example.com", "https://weeks52.me")
+        val hobby3 = Hobby(validNames[2], "취미3 요약", "취미 요약정보", "취미 상세정보", "https://example.com", "https://weeks52.me")
         em.persist(hobby1)
         em.persist(hobby2)
         em.persist(hobby3)
@@ -50,9 +50,9 @@ internal class HobbyServiceTest(
         // given
         val validNames = listOf("취미1", "취미2", "취미3")
         val invalidNames = listOf("취미4", "취미5", "취미6")
-        val hobby1 = Hobby(validNames[0], "취미1 요약", "취미 요약정보", "취미 상세정보", "https://example.com")
-        val hobby2 = Hobby(validNames[1], "취미2 요약", "취미 요약정보", "취미 상세정보", "https://example.com")
-        val hobby3 = Hobby(validNames[2], "취미3 요약", "취미 요약정보", "취미 상세정보", "https://example.com")
+        val hobby1 = Hobby(validNames[0], "취미1 요약", "취미 요약정보", "취미 상세정보", "https://example.com", "https://weeks52.me")
+        val hobby2 = Hobby(validNames[1], "취미2 요약", "취미 요약정보", "취미 상세정보", "https://example.com", "https://weeks52.me")
+        val hobby3 = Hobby(validNames[2], "취미3 요약", "취미 요약정보", "취미 상세정보", "https://example.com", "https://weeks52.me")
         em.persist(hobby1)
         em.persist(hobby2)
         em.persist(hobby3)
@@ -72,10 +72,10 @@ internal class HobbyServiceTest(
     fun getAll() {
         // given
         val names = listOf("취미1", "취미2", "취미3")
-        val hobby1 = Hobby(names[0], "취미1 요약", "취미 요약정보", "취미 상세정보", "https://example.com")
+        val hobby1 = Hobby(names[0], "취미1 요약", "취미 요약정보", "취미 상세정보", "https://example.com", "https://weeks52.me")
         hobby1.recommendCount = 3
-        val hobby2 = Hobby(names[1], "취미2 요약", "취미 요약정보", "취미 상세정보", "https://example.com")
-        val hobby3 = Hobby(names[2], "취미3 요약", "취미 요약정보", "취미 상세정보", "https://example.com")
+        val hobby2 = Hobby(names[1], "취미2 요약", "취미 요약정보", "취미 상세정보", "https://example.com", "https://weeks52.me")
+        val hobby3 = Hobby(names[2], "취미3 요약", "취미 요약정보", "취미 상세정보", "https://example.com", "https://weeks52.me")
         em.persist(hobby1)
         em.persist(hobby2)
         em.persist(hobby3)

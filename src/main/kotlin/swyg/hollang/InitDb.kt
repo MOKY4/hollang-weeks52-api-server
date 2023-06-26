@@ -36,7 +36,7 @@ class InitService(
     private lateinit var em: EntityManager
 
     private final val INIT_DATA_PATH = "static/initData.xlsx"
-    private final val IMG_URL = "https://test.com"
+    private final val IMG_URL = "localhost:8080/static"
 
     fun initFile(): Workbook {
         val inputStream: InputStream = Thread.currentThread().contextClassLoader.getResourceAsStream(INIT_DATA_PATH)
@@ -83,8 +83,9 @@ class InitService(
             val summary = row.getCell(2).stringCellValue
             val description = row.getCell(3).stringCellValue
             val imageName = row.getCell(4).stringCellValue
-            val imageUrl = "${IMG_URL}/images/hobby/$imageName.png"
-            val hobby = Hobby(originalName, shortName, summary, description, imageUrl)
+            val contentUrl = row.getCell(5).stringCellValue
+            val imageUrl = "${IMG_URL}/hobby/$imageName.png"
+            val hobby = Hobby(originalName, shortName, summary, description, imageUrl, contentUrl)
             em.persist(hobby)
         }
     }
@@ -100,7 +101,7 @@ class InitService(
             val name = row.getCell(0).stringCellValue
             val description = row.getCell(1).stringCellValue
             val mbtiType = row.getCell(2).stringCellValue
-            val imageUrl = "${IMG_URL}/images/hobby_type/${mbtiType}.png"
+            val imageUrl = "${IMG_URL}/hobby-type/${mbtiType}.png"
             val fitHobbyTypes = mutableSetOf(
                 FitHobbyType(row.getCell(3).stringCellValue, 1),
                 FitHobbyType(row.getCell(4).stringCellValue, 2),

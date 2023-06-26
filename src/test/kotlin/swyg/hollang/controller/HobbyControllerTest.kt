@@ -32,7 +32,8 @@ class HobbyControllerTest(
                 "홀랑 $i 요약",
                 "홀랑 $i 상세정보",
                 "default",
-                "https://example.com/hollang$i.png"
+                "https://example.com/hollang$i.png",
+                "https://weeks52.me"
             )
             hobby.recommendCount = 40L - i
             em.persist(hobby)
