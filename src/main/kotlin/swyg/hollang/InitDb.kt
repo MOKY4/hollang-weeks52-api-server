@@ -83,8 +83,9 @@ class InitService(
             val summary = row.getCell(2).stringCellValue
             val description = row.getCell(3).stringCellValue
             val imageName = row.getCell(4).stringCellValue
+            val contentUrl = row.getCell(5).stringCellValue
             val imageUrl = "${IMG_URL}/hobby/$imageName.png"
-            val hobby = Hobby(originalName, shortName, summary, description, imageUrl)
+            val hobby = Hobby(originalName, shortName, summary, description, imageUrl, contentUrl)
             em.persist(hobby)
         }
     }
