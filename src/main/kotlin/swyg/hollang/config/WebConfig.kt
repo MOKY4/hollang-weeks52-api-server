@@ -1,6 +1,7 @@
 package swyg.hollang.config
 
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
@@ -20,9 +21,13 @@ class WebConfig: WebMvcConfigurer {
             .excludePathPatterns("/css/**", "/*.ico")
     }
 
-    override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
-        registry.addResourceHandler("/image/**")
-            .addResourceLocations("classpath:/static/image/")
-            .setCachePeriod(60 * 60 * 24 * 365)
+    @Profile(value = ["local", "dev"])
+    @Configuration
+    class StaticResourceConfig : WebMvcConfigurer {
+        override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
+            registry.addResourceHandler("/image/**")
+                .addResourceLocations("classpath:/static/image/")
+                .setCachePeriod(60 * 60 * 24 * 365)
+        }
     }
 }
