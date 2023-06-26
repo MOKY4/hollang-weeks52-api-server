@@ -46,6 +46,7 @@ data class GetRecommendationResponse(
         val summary: String = hobbyEntity.summary
         val description: String = hobbyEntity.description
         val imageUrl: String = hobbyEntity.imageUrl
+        val contentUrl: String = hobbyEntity.contentUrl
         val ranking: Int = hobbyRanking
     }
 

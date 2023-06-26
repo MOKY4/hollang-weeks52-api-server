@@ -25,6 +25,9 @@ class Hobby (
     @Column(name = "img_url", nullable = false)
     val imageUrl: String,
 
+    @Column(name = "content_url", nullable = false)
+    val contentUrl: String,
+
     ) : BaseTimeEntity() {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
