@@ -12,9 +12,8 @@ class Recommendation private constructor(
     @JoinColumn(name = "hobby_type_id", nullable = false, updatable = false)
     val hobbyType: HobbyType,
 
-    @Type(JsonType::class)
-    @Column(name = "mbti_score", columnDefinition = "json", nullable = false, updatable = false)
-    val mbtiScore: List<Map<String, Int>> = listOf(),
+    @Embedded
+    val mbtiScore: MbtiScore
 
 ) : BaseTimeEntity() {
 
@@ -38,7 +37,7 @@ class Recommendation private constructor(
     )
     val recommendationHobbies: MutableSet<RecommendationHobby> = mutableSetOf()
 
-    constructor(hobbyType: HobbyType, mbtiScore: List<Map<String, Int>>, recommendationHobbies: MutableList<RecommendationHobby>)
+    constructor(hobbyType: HobbyType, mbtiScore: MbtiScore, recommendationHobbies: MutableList<RecommendationHobby>)
             : this(hobbyType, mbtiScore) {
         this.recommendationHobbies.addAll(recommendationHobbies)
         this.recommendationHobbies.forEach { recommendationHobby ->
