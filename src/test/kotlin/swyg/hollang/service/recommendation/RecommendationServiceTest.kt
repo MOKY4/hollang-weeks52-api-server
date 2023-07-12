@@ -120,7 +120,7 @@ internal class RecommendationServiceTest(
             RecommendationHobby(hobby2, 2),
             RecommendationHobby(hobby3, 3)
         )
-        val mbtiScore = listOf(mapOf("scoreE" to 2), mapOf("scoreN" to 3), mapOf("scoreF" to 1), mapOf("scoreJ" to 2))
+        val mbtiScore = MbtiScore(2, 3, 1, 2)
         val recommendation = Recommendation(hobbyType, mbtiScore, recommendationHobbies)
 
         val savedTestResponse = testResponseService.create(TestResponse(user, testResponseDetails, recommendation))
