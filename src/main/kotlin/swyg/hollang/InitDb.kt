@@ -36,7 +36,7 @@ class InitService(
     private lateinit var em: EntityManager
 
     private final val INIT_DATA_PATH = "static/initData.xlsx"
-    private final val IMG_URL = "localhost:8080/static"
+    private final val IMG_URL = "http://localhost:8080/image"
 
     fun initFile(): Workbook {
         val inputStream: InputStream = Thread.currentThread().contextClassLoader.getResourceAsStream(INIT_DATA_PATH)

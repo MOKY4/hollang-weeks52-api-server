@@ -5,6 +5,7 @@ on:
     branches:
       - 'stage'
     paths-ignore:
+      - 'src/main/kotlin/swyg/hollang/InitDb.kt'
       - 'src/main/resources/static/initData.xlsx'
       - 'deploy-prod.yml'
       - 'deploy-dev.yml'

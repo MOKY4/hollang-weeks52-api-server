@@ -61,8 +61,11 @@ class TestResponseManager(
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun extractMbtiScore(getInferringResultResponse: GetInferringResultResponse) =
-        getInferringResultResponse.hobbyType["scores"] as List<Map<String, Int>>
+    private fun extractMbtiScore(getInferringResultResponse: GetInferringResultResponse): MbtiScore {
+        val mbtiScores = getInferringResultResponse.hobbyType["scores"] as Map<String, Int>
+        return MbtiScore(mbtiScores["scoreE"]!!, mbtiScores["scoreN"]!!, mbtiScores["scoreF"]!!, mbtiScores["scoreJ"]!!)
+    }
+
 
     private fun extractMbtiType(getInferringResultResponse: GetInferringResultResponse) =
         getInferringResultResponse.hobbyType["mbtiType"] as String
