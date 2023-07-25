@@ -5,7 +5,14 @@ on:
     branches:
       - 'main'
     paths-ignore:
+      - 'src/main/kotlin/swyg/hollang/InitDb.kt'
       - 'src/main/resources/static/initData.xlsx'
+      - 'deploy-stage.yml'
+      - 'deploy-dev.yml'
+      - 'Dockerfile-stage'
+      - 'Dockerfile-dev'
+      - 'docker-compose.stage.yml'
+      - 'docker-compose.dev.yml'
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
