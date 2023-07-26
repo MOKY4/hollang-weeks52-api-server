@@ -2,10 +2,16 @@ package swyg.hollang.manager
 
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
+import swyg.hollang.dto.CreateTestResponseDetailRequest
 import swyg.hollang.dto.CreateTestResponseRequest
 import swyg.hollang.dto.CreateTestResponseResponse
+import swyg.hollang.dto.GetInferringResultResponse
 import swyg.hollang.entity.*
-import swyg.hollang.service.*
+import swyg.hollang.service.answer.AnswerService
+import swyg.hollang.service.hobby.HobbyService
+import swyg.hollang.service.hobbytype.HobbyTypeService
+import swyg.hollang.service.inferring.InferringService
+import swyg.hollang.service.testresponse.TestResponseService
 
 @Component
 class TestResponseManager(
@@ -19,42 +25,81 @@ class TestResponseManager(
     @Transactional
     fun createTestResponse(createTestResponseRequest: CreateTestResponseRequest): CreateTestResponseResponse {
         //유저 엔티티 생성
-        val createdUser = User(createTestResponseRequest.createUserRequest.name)
+        val user = User(name = createTestResponseRequest.user.name)
 
         //테스트 응답 상세정보 엔티티 생성
-        val questionAnswerPairs = createTestResponseRequest
-            .createTestResponseDetailRequests.map { it.questionNumber to it.answerNumber }
-        val answers = answerService
-            .getAnswersByQuestionAnswerPairsByTestVersion(questionAnswerPairs, 1)
-        val createdTestResponseDetails: MutableList<TestResponseDetail> = answers.map{answer ->
-            TestResponseDetail(answer)
-        } as MutableList<TestResponseDetail>
+        val testResponseDetails: MutableList<TestResponseDetail> = createTestResponseDetails(
+            createTestResponseDetailRequests = createTestResponseRequest.testResponseDetails)
 
         //추론 서버에 추론 요청
-        val createRecommendationResultResponse =
-            inferringService.inferHobbiesAndType(createTestResponseRequest.createTestResponseDetailRequests)
+        val getInferringResultResponse = inferringService.inferByQuestionAnswerPairs(
+                createTestResponseDetailRequests = createTestResponseRequest.testResponseDetails)
 
-        //추천받은 취미들의 추천수 카운트 증가
-        val hobbies = hobbyService.addHobbiesRecommendCount(createRecommendationResultResponse.hobbies)
+        //추론한 취미들의 추천수 카운트 증가
+        val hobbyNames = extractHobbyNames(hobbies = getInferringResultResponse.hobbies)
+        val hobbies = hobbyService.getAllByOriginalNameIsIn(originalNames = hobbyNames)
+        hobbyService.incrementRecommendCountByOriginalNameIsIn(originalNames = hobbyNames)
 
         //추천 취미 엔티티 생성
-        val recommendationHobbies = hobbies.map { hobby ->
-            RecommendationHobby(hobby)
-        } as MutableList<RecommendationHobby>
+        val recommendationHobbies = createRecommendationHobbies(
+            hobbies = hobbies, inferringHobbies = getInferringResultResponse.hobbies)
 
         //추천받은 취미 유형 찾기
-        val mbtiType = createRecommendationResultResponse.hobbyType["mbtiType"] as String
-        val hobbyType =
-            hobbyTypeService.getHobbyTypeByMbtiType(mbtiType)
+        val mbtiType = extractMbtiType(getInferringResultResponse = getInferringResultResponse)
+        val hobbyType = hobbyTypeService.getByMbtiType(mbtiType = mbtiType)
 
         //추천 엔티티 생성
-        val mbtiScore = createRecommendationResultResponse.hobbyType["scores"] as List<Map<String, Int>>
-        val createdRecommendation = Recommendation(hobbyType, mbtiScore, recommendationHobbies)
+        val mbtiScore = extractMbtiScore(getInferringResultResponse = getInferringResultResponse)
+        val recommendation = Recommendation(
+            hobbyType = hobbyType, mbtiScore = mbtiScore, recommendationHobbies = recommendationHobbies)
 
         // 테스트 응답 엔티티 생성
-        val testResponse = TestResponse(createdUser, createdRecommendation, createdTestResponseDetails)
-        val createTestResponse = testResponseService.createTestResponse(testResponse)
+        val testResponse = testResponseService.create(
+                TestResponse(user = user, testResponseDetails = testResponseDetails, recommendation = recommendation))
 
-        return CreateTestResponseResponse(createTestResponse)
+        return CreateTestResponseResponse(testResponseEntity = testResponse)
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun extractMbtiScore(getInferringResultResponse: GetInferringResultResponse): MbtiScore {
+        val mbtiScores = getInferringResultResponse.hobbyType["scores"] as Map<String, Int>
+        return MbtiScore(mbtiScores["scoreE"]!!, mbtiScores["scoreN"]!!, mbtiScores["scoreF"]!!, mbtiScores["scoreJ"]!!)
+    }
+
+
+    private fun extractMbtiType(getInferringResultResponse: GetInferringResultResponse) =
+        getInferringResultResponse.hobbyType["mbtiType"] as String
+
+    private fun createRecommendationHobbies(
+        hobbies: List<Hobby>,
+        inferringHobbies: MutableList<MutableMap<String, Any>>
+    ): MutableList<RecommendationHobby> {
+        val recommendationHobbies = hobbies.map { hobby ->
+            val ranking = inferringHobbies.find { h ->
+                h["name"]!! == hobby.originalName
+            }?.get("ranking") as Int
+            RecommendationHobby(hobby, ranking)
+        } as MutableList<RecommendationHobby>
+        return recommendationHobbies
+    }
+
+    private fun extractHobbyNames(hobbies: MutableList<MutableMap<String, Any>>): List<String> {
+        val hobbyNames = hobbies.map { hobby ->
+            val name = (hobby["name"] ?: "").toString()
+            name.trim()
+            name
+        }
+        return hobbyNames
+    }
+
+    private fun createTestResponseDetails(createTestResponseDetailRequests: List<CreateTestResponseDetailRequest>)
+        : MutableList<TestResponseDetail> {
+        val questionAnswerPairs = createTestResponseDetailRequests.map { it.questionNumber to it.answerNumber }
+        val answers = answerService
+            .getAllByQuestionAnswerPairsByTestVersion(questionAnswerPairs, 1)
+        val testResponseDetails: MutableList<TestResponseDetail> = answers.map { answer ->
+            TestResponseDetail(answer)
+        } as MutableList<TestResponseDetail>
+        return testResponseDetails
     }
 }

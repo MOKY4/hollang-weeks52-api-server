@@ -4,9 +4,9 @@ import swyg.hollang.entity.Recommendation
 
 interface RecommendationRepository {
 
-    fun save(recommendation: Recommendation): Recommendation
+    fun findWithUserAndHobbyTypeAndHobbiesAndSurveyById(recommendationId: Long): Recommendation
 
-    fun findByIdWithUserAndHobbyTypeAndHobbiesAndSurvey(recommendationId: Long): Recommendation
+    fun findWithUserAndHobbyTypeAndHobbiesById(recommendationId: Long): Recommendation
 
-    fun findByIdWithUserAndHobbyTypeAndHobbies(recommendationId: Long): Recommendation
+    fun findWithHobbiesById(recommendationId: Long): Recommendation
 }

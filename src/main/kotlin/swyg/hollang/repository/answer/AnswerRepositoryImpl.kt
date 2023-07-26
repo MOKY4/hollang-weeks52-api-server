@@ -10,10 +10,15 @@ import swyg.hollang.entity.QTest.test
 
 @Repository
 class AnswerRepositoryImpl(
-    private val jpaQueryFactory: JPAQueryFactory): AnswerRepository {
+    private val jpaQueryFactory: JPAQueryFactory,
+    private val answerJpaRepository: AnswerJpaRepository): AnswerRepository {
 
-    override fun findAllByQuestionAnswerPairsByTestVersion(
-        questionAnswerPairs: List<Pair<Long, Long>>, testVersion: Long): List<Answer> {
+    override fun save(answer: Answer): Answer {
+        return answerJpaRepository.save(answer)
+    }
+
+    override fun findAllByQuestionAnswerPairsAndTestVersion(
+        questionAnswerPairs: List<Pair<Int, Int>>, testVersion: Int): List<Answer> {
 
         //빌더를 이용해서 여러개의 조건 조합을 만든다.
         val predicates = questionAnswerPairs.map { pair ->

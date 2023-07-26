@@ -2,12 +2,20 @@ FROM amazoncorretto:17-alpine
 
 WORKDIR /app
 
-ARG JAR_FILE=./build/libs/hollang-1.0.0.jar
+ENV PROFILES=dev
 
-COPY ${JAR_FILE} hollang-dev.jar
+ARG ORIGINAL_INITDATA_FILE=./src/main/resources/static/initData.xlsx
+ARG COPYIED_INITDATA_FILE=/app/static/initData.xlsx
 
-ENV PROFILES dev
+COPY ${ORIGINAL_INITDATA_FILE} ${COPYIED_INITDATA_FILE}
 
-EXPOSE 80
+ARG ORIGINAL_JAR_FILE=./build/libs/hollang-weeks52-1.0.0.jar
+ARG COPYIED_JAR_FILE=hollang-weeks52-${PROFILES}.jar
 
-ENTRYPOINT ["java", "-Dspring.profiles.active=${PROFILES}", "-jar", "/app/hollang-dev.jar"]
+COPY ${ORIGINAL_JAR_FILE} ${COPYIED_JAR_FILE}
+
+ENV DEFAULT_PORT 8080
+
+EXPOSE ${DEFAULT_PORT}
+
+CMD ["java", "-Dspring.profiles.active=${PROFILES}", "-jar", "/app/hollang-weeks52-dev.jar"]

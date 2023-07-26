@@ -5,8 +5,8 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import swyg.hollang.dto.CreateRecommendationSurveyRequest
-import swyg.hollang.dto.RecommendHobbyAndTypesResponse
-import swyg.hollang.dto.RecommendShareResponse
+import swyg.hollang.dto.GetRecommendationResponse
+import swyg.hollang.dto.GetRecommendationShareResponse
 import swyg.hollang.dto.common.SuccessResponse
 import swyg.hollang.manager.RecommendationManager
 import swyg.hollang.utils.WebProperties
@@ -17,9 +17,9 @@ import swyg.hollang.utils.WebProperties
 class RecommendationController(private val recommendationManager: RecommendationManager) {
 
     @GetMapping("/{recommendationId}")
-    fun recommendHobbyAndTypes(@PathVariable("recommendationId") recommendationId: Long)
-        : ResponseEntity<SuccessResponse<RecommendHobbyAndTypesResponse>> {
-        val recommendHobbyAndTypesResponse = recommendationManager.getUserRecommendation(recommendationId)
+    fun getRecommendationDetails(@PathVariable("recommendationId") recommendationId: Long)
+        : ResponseEntity<SuccessResponse<GetRecommendationResponse>> {
+        val recommendHobbyAndTypesResponse = recommendationManager.getRecommendationById(recommendationId)
         return ResponseEntity.ok()
             .body(SuccessResponse(
                 HttpStatus.OK.name,
@@ -29,9 +29,9 @@ class RecommendationController(private val recommendationManager: Recommendation
     }
 
     @GetMapping("/{recommendationId}/shares")
-    fun getRecommendationShare(@PathVariable("recommendationId") recommendationId: Long)
-            : ResponseEntity<SuccessResponse<RecommendShareResponse>> {
-        val recommendShareResponse = recommendationManager.getUserRecommendationWithoutFitHobbies(recommendationId)
+    fun getRecommendationShareDetails(@PathVariable("recommendationId") recommendationId: Long)
+            : ResponseEntity<SuccessResponse<GetRecommendationShareResponse>> {
+        val recommendShareResponse = recommendationManager.getRecommendationWithoutFitHobbiesById(recommendationId)
         return ResponseEntity.ok()
             .body(SuccessResponse(
                 HttpStatus.OK.name,

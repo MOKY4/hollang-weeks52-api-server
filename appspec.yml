@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/ec2-user/app/api-server
+    destination: /home/ec2-user/app
     overwrite: yes
 permissions:
   - object: /home/ec2-user/app/api-server
@@ -15,7 +15,7 @@ hooks:
       runas: ec2-user
   BeforeInstall:
     - location: scripts/config_services.sh
-      timeout: 120
+      timeout: 300
       runas: ec2-user
   AfterInstall:
     - location: scripts/start_services.sh

@@ -12,15 +12,18 @@ class Recommendation private constructor(
     @JoinColumn(name = "hobby_type_id", nullable = false, updatable = false)
     val hobbyType: HobbyType,
 
-    @Type(JsonType::class)
-    @Column(name = "mbti_score", columnDefinition = "json", nullable = false, updatable = false)
-    val mbtiScore: List<Map<String, Int>> = listOf()
+    @Embedded
+    val mbtiScore: MbtiScore
 
 ) : BaseTimeEntity() {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "recommendation_id")
     val id: Long? = null
+
+    @OneToOne(fetch = LAZY, cascade = [CascadeType.REMOVE], orphanRemoval = true)
+    @JoinColumn(name = "user_id", nullable = false, updatable = false)
+    var user: User? = null
 
     @OneToOne(fetch = LAZY)
     @JoinColumn(name = "test_response_id", nullable = false, updatable = false)
@@ -32,13 +35,14 @@ class Recommendation private constructor(
         orphanRemoval = true,
         fetch = LAZY
     )
-    val recommendationHobbies: MutableList<RecommendationHobby> = mutableListOf()
+    val recommendationHobbies: MutableSet<RecommendationHobby> = mutableSetOf()
 
-    constructor(hobbyType: HobbyType, mbtiScore: List<Map<String, Int>>,
-                recommendationHobbies: MutableList<RecommendationHobby>) : this(hobbyType, mbtiScore) {
+    constructor(hobbyType: HobbyType, mbtiScore: MbtiScore, recommendationHobbies: MutableList<RecommendationHobby>)
+            : this(hobbyType, mbtiScore) {
         this.recommendationHobbies.addAll(recommendationHobbies)
-        recommendationHobbies.forEach { recommendationHobby ->
-            recommendationHobby.recommendation = recommendationHobby.recommendation ?: this
+        this.recommendationHobbies.forEach { recommendationHobby ->
+            recommendationHobby.recommendation = this
         }
     }
+
 }

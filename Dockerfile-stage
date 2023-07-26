@@ -1,0 +1,16 @@
+FROM amazoncorretto:17-alpine
+
+WORKDIR /app
+
+ENV PROFILES=stage
+
+ARG ORIGINAL_JAR_FILE=./build/libs/hollang-weeks52-1.0.0.jar
+ARG COPYIED_JAR_FILE=hollang-weeks52-${PROFILES}.jar
+
+COPY ${ORIGINAL_JAR_FILE} ${COPYIED_JAR_FILE}
+
+ENV DEFAULT_PORT 80
+
+EXPOSE ${DEFAULT_PORT}
+
+CMD ["java", "-Dspring.profiles.active=${PROFILES}", "-jar", "/app/hollang-weeks52-stage.jar"]

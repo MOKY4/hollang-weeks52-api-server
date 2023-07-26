@@ -8,7 +8,7 @@ import swyg.hollang.entity.common.BaseTimeEntity
 class Answer(
 
     @Column(name = "answer_number", nullable = false)
-    val number: Long,
+    val number: Int,
 
     @Column(name = "content", nullable = false)
     val content: String

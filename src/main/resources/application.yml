@@ -1,7 +1,7 @@
 spring:
   config:
     activate:
-      on-profile: prod, dev, local
+      on-profile: prod, stage, dev, local, test
   servlet:
     multipart:
       max-file-size: 10MB
@@ -10,9 +10,8 @@ spring:
     properties:
       hibernate:
         jdbc:
-          batch_size: 100
-          order_inserts: true
-          order_updates: true
+          # Batch Insert를 위해서 Batch Size 50으로 설정
+          batch_size: 50
   mvc:
     throw-exception-if-no-handler-found: true
 
@@ -24,13 +23,6 @@ management:
   endpoint:
     health:
       show-details: always
-
-aws:
-  s3:
-    bucket: ${S3_BUCKET_NAME}
-    init-data-key: ${S3_INIT_DATA_KEY}
-  cloudfront:
-    host: ${CLOUDFRONT_HOST}
 
 inferring:
   server:

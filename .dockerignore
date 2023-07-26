@@ -10,7 +10,7 @@ src/test/
 docker-compose.*.yml
 
 ### DEPLOY FILES ###
-codedeploy/
+appspec.yml
 
-### CUSTOM ###
-src/main/resources/static/initData.xlsx
+### ETC ###
+
