@@ -44,7 +44,7 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
           docker pull $ECR_REGISTRY/$ECR_INFERRING_SERVER_REPOSITORY:latest
-          docker run -d -p 5000:5000 -name hollang-weeks52-inferring-server $ECR_REGISTRY/$ECR_INFERRING_SERVER_REPOSITORY:latest
+          docker run -d -p 5000:5000 --name hollang-weeks52-inferring-server $ECR_REGISTRY/$ECR_INFERRING_SERVER_REPOSITORY:latest
       # Checkout source code
       - name: Checkout code
         uses: actions/checkout@v3
