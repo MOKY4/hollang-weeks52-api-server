@@ -14,6 +14,7 @@ data class CreateTestResponseRequest(
     @field:Size(min = 12, max = 12, message = "12개의 질문에 모두 답해주세요.")
     val testResponseDetails: List<CreateTestResponseDetailRequest>)
 
+
 data class CreateUserRequest(
     @field:Size(min = 1, max = 5, message = "사용자 이름은 최소 1글자 최대 5글자까지 가능합니다.")
     val name: String)
